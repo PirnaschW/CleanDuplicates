@@ -2,18 +2,19 @@
 #include "pch.h"
 #include "framework.h"
 #include "MainFrm.h"
-#include "ClassView.h"
+#include "ScopeView.h"
 #include "Resource.h"
 #include "CleanDuplicates.h"
+#include "Traverse.h"
 
-class CClassViewMenuButton : public CMFCToolBarMenuButton
+class CScopeViewMenuButton : public CMFCToolBarMenuButton
 {
-	friend class CClassView;
+	friend class CScopeView;
 
-	DECLARE_SERIAL(CClassViewMenuButton)
+	DECLARE_SERIAL(CScopeViewMenuButton)
 
 public:
-	CClassViewMenuButton(HMENU hMenu = nullptr) noexcept : CMFCToolBarMenuButton((UINT)-1, hMenu, -1)
+	CScopeViewMenuButton(HMENU hMenu = nullptr) noexcept : CMFCToolBarMenuButton((UINT)-1, hMenu, -1)
 	{
 	}
 
@@ -31,29 +32,29 @@ public:
 	}
 };
 
-IMPLEMENT_SERIAL(CClassViewMenuButton, CMFCToolBarMenuButton, 1)
+IMPLEMENT_SERIAL(CScopeViewMenuButton, CMFCToolBarMenuButton, 1)
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CClassView::CClassView() noexcept
+CScopeView::CScopeView() noexcept
 {
 	m_nCurrSort = ID_SORTING_GROUPBYTYPE;
 }
 
-CClassView::~CClassView()
+CScopeView::~CScopeView()
 {
 }
 
-BEGIN_MESSAGE_MAP(CClassView, CDockablePane)
+BEGIN_MESSAGE_MAP(CScopeView, CDockablePane)
 	ON_WM_CREATE()
 	ON_WM_SIZE()
 	ON_WM_CONTEXTMENU()
-	ON_COMMAND(ID_CLASS_ADD_MEMBER_FUNCTION, OnClassAddMemberFunction)
-	ON_COMMAND(ID_CLASS_ADD_MEMBER_VARIABLE, OnClassAddMemberVariable)
-	ON_COMMAND(ID_CLASS_DEFINITION, OnClassDefinition)
-	ON_COMMAND(ID_CLASS_PROPERTIES, OnClassProperties)
+	ON_COMMAND(ID_CLASS_ADD_MEMBER_FUNCTION, OnScopeAddMemberFunction)
+	ON_COMMAND(ID_CLASS_ADD_MEMBER_VARIABLE, OnScopeAddMemberVariable)
+	ON_COMMAND(ID_CLASS_DEFINITION, OnScopeDefinition)
+	ON_COMMAND(ID_CLASS_PROPERTIES, OnScopeProperties)
 	ON_COMMAND(ID_NEW_FOLDER, OnNewFolder)
 	ON_WM_PAINT()
 	ON_WM_SETFOCUS()
@@ -62,9 +63,9 @@ BEGIN_MESSAGE_MAP(CClassView, CDockablePane)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
-// CClassView message handlers
+// CScopeView message handlers
 
-int CClassView::OnCreate(LPCREATESTRUCT lpCreateStruct)
+int CScopeView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
 	if (CDockablePane::OnCreate(lpCreateStruct) == -1)
 		return -1;
@@ -75,9 +76,9 @@ int CClassView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	// Create views:
 	const DWORD dwViewStyle = WS_CHILD | WS_VISIBLE | TVS_HASLINES | TVS_LINESATROOT | TVS_HASBUTTONS | WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
 
-	if (!m_wndClassView.Create(dwViewStyle, rectDummy, this, 2))
+	if (!m_wndScopeView.Create(dwViewStyle, rectDummy, this, 2))
 	{
-		TRACE0("Failed to create Class View\n");
+		TRACE0("Failed to create Scope View\n");
 		return -1;      // fail to create
 	}
 
@@ -98,9 +99,9 @@ int CClassView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	CMenu menuSort;
 	menuSort.LoadMenu(IDR_POPUP_SORT);
 
-	m_wndToolBar.ReplaceButton(ID_SORT_MENU, CClassViewMenuButton(menuSort.GetSubMenu(0)->GetSafeHmenu()));
+	m_wndToolBar.ReplaceButton(ID_SORT_MENU, CScopeViewMenuButton(menuSort.GetSubMenu(0)->GetSafeHmenu()));
 
-	CClassViewMenuButton* pButton =  DYNAMIC_DOWNCAST(CClassViewMenuButton, m_wndToolBar.GetButton(0));
+	CScopeViewMenuButton* pButton =  DYNAMIC_DOWNCAST(CScopeViewMenuButton, m_wndToolBar.GetButton(0));
 
 	if (pButton != nullptr)
 	{
@@ -111,58 +112,72 @@ int CClassView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	}
 
 	// Fill in some static tree view data (dummy code, nothing magic here)
-	FillClassView();
+	FillScopeView();
 
 	return 0;
 }
 
-void CClassView::OnSize(UINT nType, int cx, int cy)
+void CScopeView::OnSize(UINT nType, int cx, int cy)
 {
 	CDockablePane::OnSize(nType, cx, cy);
 	AdjustLayout();
 }
 
-void CClassView::FillClassView()
+
+bool CScopeView::CollectFiles(const std::wstring& path, const WIN32_FIND_DATA& data, bool children)
 {
-	HTREEITEM hRoot = m_wndClassView.InsertItem(_T("FakeApp classes"), 0, 0);
-	m_wndClassView.SetItemState(hRoot, TVIS_BOLD, TVIS_BOLD);
+	FileData f{ std::wstring(path + L"\\" + data.cFileName + L"\n") , children,  data.ftCreationTime, data.ftLastWriteTime };
+	files_.push_back(f);
 
-	HTREEITEM hClass = m_wndClassView.InsertItem(_T("CFakeAboutDlg"), 1, 1, hRoot);
-	m_wndClassView.InsertItem(_T("CFakeAboutDlg()"), 3, 3, hClass);
+	m_wndScopeView.Expand(hScope, TVE_EXPAND);
+	if (children) hScope = m_wndScopeView.InsertItem(data.cFileName, 0, 0, hScope);
+	else m_wndScopeView.InsertItem(data.cFileName, 2, 2, hScope);
+	m_wndScopeView.Expand(hScope, TVE_EXPAND);
 
-	m_wndClassView.Expand(hRoot, TVE_EXPAND);
-
-	hClass = m_wndClassView.InsertItem(_T("CFakeApp"), 1, 1, hRoot);
-	m_wndClassView.InsertItem(_T("CFakeApp()"), 3, 3, hClass);
-	m_wndClassView.InsertItem(_T("InitInstance()"), 3, 3, hClass);
-	m_wndClassView.InsertItem(_T("OnAppAbout()"), 3, 3, hClass);
-
-	hClass = m_wndClassView.InsertItem(_T("CFakeAppDoc"), 1, 1, hRoot);
-	m_wndClassView.InsertItem(_T("CFakeAppDoc()"), 4, 4, hClass);
-	m_wndClassView.InsertItem(_T("~CFakeAppDoc()"), 3, 3, hClass);
-	m_wndClassView.InsertItem(_T("OnNewDocument()"), 3, 3, hClass);
-
-	hClass = m_wndClassView.InsertItem(_T("CFakeAppView"), 1, 1, hRoot);
-	m_wndClassView.InsertItem(_T("CFakeAppView()"), 4, 4, hClass);
-	m_wndClassView.InsertItem(_T("~CFakeAppView()"), 3, 3, hClass);
-	m_wndClassView.InsertItem(_T("GetDocument()"), 3, 3, hClass);
-	m_wndClassView.Expand(hClass, TVE_EXPAND);
-
-	hClass = m_wndClassView.InsertItem(_T("CFakeAppFrame"), 1, 1, hRoot);
-	m_wndClassView.InsertItem(_T("CFakeAppFrame()"), 3, 3, hClass);
-	m_wndClassView.InsertItem(_T("~CFakeAppFrame()"), 3, 3, hClass);
-	m_wndClassView.InsertItem(_T("m_wndMenuBar"), 6, 6, hClass);
-	m_wndClassView.InsertItem(_T("m_wndToolBar"), 6, 6, hClass);
-	m_wndClassView.InsertItem(_T("m_wndStatusBar"), 6, 6, hClass);
-
-	hClass = m_wndClassView.InsertItem(_T("Globals"), 2, 2, hRoot);
-	m_wndClassView.InsertItem(_T("theFakeApp"), 5, 5, hClass);
-	m_wndClassView.Expand(hClass, TVE_EXPAND);
+	return true;  // always drill down further
 }
 
-void CClassView::OnContextMenu(CWnd* pWnd, CPoint point)
+void CScopeView::FillScopeView()
 {
-	CTreeCtrl* pWndTree = (CTreeCtrl*)&m_wndClassView;
+  // clear everything out
+	files_.clear();
+	hRoot = {};
+	hScope = {};
+	m_wndScopeView.DeleteAllItems();
+
+  // set up root items
+	hRoot = m_wndScopeView.InsertItem(_T("Scope"), 0, 0);
+	m_wndScopeView.SetItemState(hRoot, TVIS_BOLD, TVIS_BOLD);
+	hScope = m_wndScopeView.InsertItem(LR"(D:\Projects\Test1)", 0, 0, hRoot);
+	m_wndScopeView.InsertItem(LR"(D:\Projects\Test1)", 2, 2, hScope);
+	m_wndScopeView.Expand(hScope, TVE_EXPAND);
+
+
+  // add all other items
+	Traverse::ProcessTree(LR"(D:\Projects\Test1)", std::bind(&CScopeView::CollectFiles, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+
+
+
+	//hScope = m_wndScopeView.InsertItem(_T("CFakeAboutDlg"), 1, 1, hRoot);
+	//m_wndScopeView.InsertItem(_T("CFakeAboutDlg()"), 3, 3, hScope);
+
+	m_wndScopeView.Expand(hRoot, TVE_EXPAND);
+
+	hScope = m_wndScopeView.InsertItem(_T("CFakeAppFrame"), 1, 1, hRoot);
+	m_wndScopeView.InsertItem(_T("CFakeAppFrame()"), 2, 2, hScope);
+	m_wndScopeView.InsertItem(_T("~CFakeAppFrame()"), 2, 2, hScope);
+	m_wndScopeView.InsertItem(_T("m_wndMenuBar"), 2, 2, hScope);
+	m_wndScopeView.InsertItem(_T("m_wndToolBar"), 2, 2, hScope);
+	m_wndScopeView.InsertItem(_T("m_wndStatusBar"), 2, 2, hScope);
+
+	hScope = m_wndScopeView.InsertItem(_T("Globals"), 2, 2, hRoot);
+	m_wndScopeView.InsertItem(_T("theFakeApp"), 2, 2, hScope);
+	m_wndScopeView.Expand(hScope, TVE_EXPAND);
+}
+
+void CScopeView::OnContextMenu(CWnd* pWnd, CPoint point)
+{
+	CTreeCtrl* pWndTree = (CTreeCtrl*)&m_wndScopeView;
 	ASSERT_VALID(pWndTree);
 
 	if (pWnd != pWndTree)
@@ -203,7 +218,7 @@ void CClassView::OnContextMenu(CWnd* pWnd, CPoint point)
 	}
 }
 
-void CClassView::AdjustLayout()
+void CScopeView::AdjustLayout()
 {
 	if (GetSafeHwnd() == nullptr)
 	{
@@ -216,15 +231,15 @@ void CClassView::AdjustLayout()
 	int cyTlb = m_wndToolBar.CalcFixedLayout(FALSE, TRUE).cy;
 
 	m_wndToolBar.SetWindowPos(nullptr, rectClient.left, rectClient.top, rectClient.Width(), cyTlb, SWP_NOACTIVATE | SWP_NOZORDER);
-	m_wndClassView.SetWindowPos(nullptr, rectClient.left + 1, rectClient.top + cyTlb + 1, rectClient.Width() - 2, rectClient.Height() - cyTlb - 2, SWP_NOACTIVATE | SWP_NOZORDER);
+	m_wndScopeView.SetWindowPos(nullptr, rectClient.left + 1, rectClient.top + cyTlb + 1, rectClient.Width() - 2, rectClient.Height() - cyTlb - 2, SWP_NOACTIVATE | SWP_NOZORDER);
 }
 
-BOOL CClassView::PreTranslateMessage(MSG* pMsg)
+BOOL CScopeView::PreTranslateMessage(MSG* pMsg)
 {
 	return CDockablePane::PreTranslateMessage(pMsg);
 }
 
-void CClassView::OnSort(UINT id)
+void CScopeView::OnSort(UINT id)
 {
 	if (m_nCurrSort == id)
 	{
@@ -233,7 +248,7 @@ void CClassView::OnSort(UINT id)
 
 	m_nCurrSort = id;
 
-	CClassViewMenuButton* pButton =  DYNAMIC_DOWNCAST(CClassViewMenuButton, m_wndToolBar.GetButton(0));
+	CScopeViewMenuButton* pButton =  DYNAMIC_DOWNCAST(CScopeViewMenuButton, m_wndToolBar.GetButton(0));
 
 	if (pButton != nullptr)
 	{
@@ -243,60 +258,60 @@ void CClassView::OnSort(UINT id)
 	}
 }
 
-void CClassView::OnUpdateSort(CCmdUI* pCmdUI)
+void CScopeView::OnUpdateSort(CCmdUI* pCmdUI)
 {
 	pCmdUI->SetCheck(pCmdUI->m_nID == m_nCurrSort);
 }
 
-void CClassView::OnClassAddMemberFunction()
+void CScopeView::OnScopeAddMemberFunction()
 {
 	AfxMessageBox(_T("Add member function..."));
 }
 
-void CClassView::OnClassAddMemberVariable()
+void CScopeView::OnScopeAddMemberVariable()
 {
 	// TODO: Add your command handler code here
 }
 
-void CClassView::OnClassDefinition()
+void CScopeView::OnScopeDefinition()
 {
 	// TODO: Add your command handler code here
 }
 
-void CClassView::OnClassProperties()
+void CScopeView::OnScopeProperties()
 {
 	// TODO: Add your command handler code here
 }
 
-void CClassView::OnNewFolder()
+void CScopeView::OnNewFolder()
 {
 	AfxMessageBox(_T("New Folder..."));
 }
 
-void CClassView::OnPaint()
+void CScopeView::OnPaint()
 {
 	CPaintDC dc(this); // device context for painting
 
 	CRect rectTree;
-	m_wndClassView.GetWindowRect(rectTree);
+	m_wndScopeView.GetWindowRect(rectTree);
 	ScreenToClient(rectTree);
 
 	rectTree.InflateRect(1, 1);
 	dc.Draw3dRect(rectTree, ::GetSysColor(COLOR_3DSHADOW), ::GetSysColor(COLOR_3DSHADOW));
 }
 
-void CClassView::OnSetFocus(CWnd* pOldWnd)
+void CScopeView::OnSetFocus(CWnd* pOldWnd)
 {
 	CDockablePane::OnSetFocus(pOldWnd);
 
-	m_wndClassView.SetFocus();
+	m_wndScopeView.SetFocus();
 }
 
-void CClassView::OnChangeVisualStyle()
+void CScopeView::OnChangeVisualStyle()
 {
-	m_ClassViewImages.DeleteImageList();
+	m_ScopeViewImages.DeleteImageList();
 
-	UINT uiBmpId = theApp.m_bHiColorIcons ? IDB_CLASS_VIEW_24 : IDB_CLASS_VIEW;
+	UINT uiBmpId = theApp.m_bHiColorIcons ? IDB_FILE_VIEW_24 : IDB_FILE_VIEW;
 
 	CBitmap bmp;
 	if (!bmp.LoadBitmap(uiBmpId))
@@ -313,10 +328,10 @@ void CClassView::OnChangeVisualStyle()
 
 	nFlags |= (theApp.m_bHiColorIcons) ? ILC_COLOR24 : ILC_COLOR4;
 
-	m_ClassViewImages.Create(16, bmpObj.bmHeight, nFlags, 0, 0);
-	m_ClassViewImages.Add(&bmp, RGB(255, 0, 0));
+	m_ScopeViewImages.Create(16, bmpObj.bmHeight, nFlags, 0, 0);
+	m_ScopeViewImages.Add(&bmp, RGB(255, 0, 255));
 
-	m_wndClassView.SetImageList(&m_ClassViewImages, TVSIL_NORMAL);
+	m_wndScopeView.SetImageList(&m_ScopeViewImages, TVSIL_NORMAL);
 
 	m_wndToolBar.CleanUpLockedImages();
 	m_wndToolBar.LoadBitmap(theApp.m_bHiColorIcons ? IDB_SORT_24 : IDR_SORT, 0, 0, TRUE /* Locked */);

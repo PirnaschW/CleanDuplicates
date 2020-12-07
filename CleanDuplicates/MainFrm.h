@@ -4,7 +4,7 @@
 
 #pragma once
 #include "FileView.h"
-#include "ClassView.h"
+#include "ScopeView.h"
 #include "OutputWnd.h"
 #include "PropertiesWnd.h"
 
@@ -39,7 +39,7 @@ protected:  // control bar embedded members
 	CMFCStatusBar     m_wndStatusBar;
 	CMFCToolBarImages m_UserImages;
 	CFileView         m_wndFileView;
-	CClassView        m_wndClassView;
+	CScopeView        m_wndScopeView;
 	COutputWnd        m_wndOutput;
 	CPropertiesWnd    m_wndProperties;
 

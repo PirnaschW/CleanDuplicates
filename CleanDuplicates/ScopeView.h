@@ -1,9 +1,11 @@
 
 #pragma once
 
+#include <string>
+#include <vector>
 #include "ViewTree.h"
 
-class CClassToolBar : public CMFCToolBar
+class CScopeToolBar : public CMFCToolBar
 {
 	virtual void OnUpdateCmdUI(CFrameWnd* /*pTarget*/, BOOL bDisableIfNoHndler)
 	{
@@ -13,22 +15,22 @@ class CClassToolBar : public CMFCToolBar
 	virtual BOOL AllowShowOnList() const { return FALSE; }
 };
 
-class CClassView : public CDockablePane
+class CScopeView : public CDockablePane
 {
 public:
-	CClassView() noexcept;
-	virtual ~CClassView();
+	CScopeView() noexcept;
+	virtual ~CScopeView();
 
 	void AdjustLayout();
 	void OnChangeVisualStyle();
 
 protected:
-	CClassToolBar m_wndToolBar;
-	CViewTree m_wndClassView;
-	CImageList m_ClassViewImages;
+	CScopeToolBar m_wndToolBar;
+	CViewTree m_wndScopeView;
+	CImageList m_ScopeViewImages;
 	UINT m_nCurrSort;
 
-	void FillClassView();
+	void FillScopeView();
 
 // Overrides
 public:
@@ -38,10 +40,10 @@ protected:
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
-	afx_msg void OnClassAddMemberFunction();
-	afx_msg void OnClassAddMemberVariable();
-	afx_msg void OnClassDefinition();
-	afx_msg void OnClassProperties();
+	afx_msg void OnScopeAddMemberFunction();
+	afx_msg void OnScopeAddMemberVariable();
+	afx_msg void OnScopeDefinition();
+	afx_msg void OnScopeProperties();
 	afx_msg void OnNewFolder();
 	afx_msg void OnPaint();
 	afx_msg void OnSetFocus(CWnd* pOldWnd);
@@ -50,5 +52,20 @@ protected:
 	afx_msg void OnUpdateSort(CCmdUI* pCmdUI);
 
 	DECLARE_MESSAGE_MAP()
+
+
+	bool CollectFiles(const std::wstring& path, const WIN32_FIND_DATA& data, bool Children);  // callback function to build tree
+private:
+	struct FileData
+	{
+		std::wstring path;
+		bool directory;
+		FILETIME ftCreationTime;
+		FILETIME ftLastWriteTime;
+	};
+	std::vector<FileData> files_{};
+	HTREEITEM hRoot{};
+	HTREEITEM hScope{};
+
 };
 
