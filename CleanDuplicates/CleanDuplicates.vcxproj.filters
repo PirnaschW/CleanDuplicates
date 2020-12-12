@@ -13,15 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Traverse">
-      <UniqueIdentifier>{f81524cc-d810-4176-aaa7-8844343d713b}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CleanDuplicates.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="framework.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="targetver.h">
@@ -57,9 +51,6 @@
     <ClInclude Include="pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Traverse.h">
-      <Filter>Traverse</Filter>
-    </ClInclude>
     <ClInclude Include="ScopeView.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -94,9 +85,6 @@
     </ClCompile>
     <ClCompile Include="pch.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Traverse.cpp">
-      <Filter>Traverse</Filter>
     </ClCompile>
     <ClCompile Include="ScopeView.cpp">
       <Filter>Source Files</Filter>

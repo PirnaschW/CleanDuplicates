@@ -1,22 +1,20 @@
 
-#pragma once
-
 /////////////////////////////////////////////////////////////////////////////
-// CViewTree window
+//  CViewTree  window
 
-class CViewTree : public CTreeCtrl
+class  CViewTree  :  public  CTreeCtrl
 {
-// Construction
+//  Construction
 public:
-	CViewTree() noexcept;
+	CViewTree()    noexcept;
 
-// Overrides
+//  Overrides
 protected:
-	virtual BOOL OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult);
+	virtual  BOOL  OnNotify(WPARAM  wParam,  LPARAM  lParam,  LRESULT*  pResult);
 
-// Implementation
+//  Implementation
 public:
-	virtual ~CViewTree();
+	virtual  ~CViewTree();
 
 protected:
 	DECLARE_MESSAGE_MAP()

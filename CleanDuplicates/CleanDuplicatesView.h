@@ -1,52 +1,49 @@
 
-// CleanDuplicatesView.h : interface of the CCleanDuplicatesView class
+//  CleanDuplicatesView.h  :  interface  of  the  CCleanDuplicatesView  class
 //
 
-#pragma once
-
-
-class CCleanDuplicatesView : public CView
+class  CCleanDuplicatesView  :  public  CView
 {
-protected: // create from serialization only
-	CCleanDuplicatesView() noexcept;
+protected:  //  create  from  serialization  only
+	CCleanDuplicatesView()  noexcept;
 	DECLARE_DYNCREATE(CCleanDuplicatesView)
 
-// Attributes
+//  Attributes
 public:
-	CCleanDuplicatesDoc* GetDocument() const;
+	CCleanDuplicatesDoc*  GetDocument()  const;
 
-// Operations
+//  Operations
 public:
 
-// Overrides
+//  Overrides
 public:
-	virtual void OnDraw(CDC* pDC);  // overridden to draw this view
-	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
+	virtual  void  OnDraw(CDC*  pDC);    //  overridden  to  draw  this  view
+	virtual  BOOL  PreCreateWindow(CREATESTRUCT&  cs);
 protected:
-	virtual BOOL OnPreparePrinting(CPrintInfo* pInfo);
-	virtual void OnBeginPrinting(CDC* pDC, CPrintInfo* pInfo);
-	virtual void OnEndPrinting(CDC* pDC, CPrintInfo* pInfo);
+	virtual  BOOL  OnPreparePrinting(CPrintInfo*  pInfo);
+	virtual  void  OnBeginPrinting(CDC*  pDC,  CPrintInfo*  pInfo);
+	virtual  void  OnEndPrinting(CDC*  pDC,  CPrintInfo*  pInfo);
 
-// Implementation
+//  Implementation
 public:
-	virtual ~CCleanDuplicatesView();
-#ifdef _DEBUG
-	virtual void AssertValid() const;
-	virtual void Dump(CDumpContext& dc) const;
+	virtual  ~CCleanDuplicatesView();
+#ifdef  _DEBUG
+	virtual  void  AssertValid()  const;
+	virtual  void  Dump(CDumpContext&  dc)  const;
 #endif
 
 protected:
 
-// Generated message map functions
+//  Generated  message  map  functions
 protected:
-	afx_msg void OnFilePrintPreview();
-	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
-	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
+	afx_msg  void  OnFilePrintPreview();
+	afx_msg  void  OnRButtonUp(UINT  nFlags,  CPoint  point);
+	afx_msg  void  OnContextMenu(CWnd*  pWnd,  CPoint  point);
 	DECLARE_MESSAGE_MAP()
 };
 
-#ifndef _DEBUG  // debug version in CleanDuplicatesView.cpp
-inline CCleanDuplicatesDoc* CCleanDuplicatesView::GetDocument() const
-   { return reinterpret_cast<CCleanDuplicatesDoc*>(m_pDocument); }
+#ifndef  _DEBUG    //  debug  version  in  CleanDuplicatesView.cpp
+inline  CCleanDuplicatesDoc*  CCleanDuplicatesView::GetDocument()  const
+      {  return  reinterpret_cast<CCleanDuplicatesDoc*>(m_pDocument);  }
 #endif
 
