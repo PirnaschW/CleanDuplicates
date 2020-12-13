@@ -204,6 +204,7 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="ViewTree.h" />
+    <ClInclude Include="WndDirList.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ChildFrm.cpp" />
@@ -222,6 +223,7 @@
     </ClCompile>
     <ClCompile Include="PropertiesWnd.cpp" />
     <ClCompile Include="ViewTree.cpp" />
+    <ClCompile Include="WinDirList.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="CleanDuplicates.reg" />
@@ -237,6 +239,10 @@
     <Image Include="res\class_view_hc.ico" />
     <Image Include="res\CleanDuplicates.ico" />
     <Image Include="res\CleanDuplicatesDoc.ico" />
+    <Image Include="res\dirlist.bmp" />
+    <Image Include="res\dirlist_hc.bmp" />
+    <Image Include="res\dirlist.ico" />
+    <Image Include="res\dirlist_hc.ico" />
     <Image Include="res\explorer.bmp" />
     <Image Include="res\explorer_hc.bmp" />
     <Image Include="res\fileview.bmp" />

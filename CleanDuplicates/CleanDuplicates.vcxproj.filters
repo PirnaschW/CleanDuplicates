@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\MyClasses">
+      <UniqueIdentifier>{aa3457a5-a1ac-4c23-a5cb-31dd86c50100}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\MyClasses">
+      <UniqueIdentifier>{48da6738-c4fd-4cd2-a1d3-78d79b61239f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CleanDuplicates.h">
@@ -54,6 +60,9 @@
     <ClInclude Include="ScopeView.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="WndDirList.h">
+      <Filter>Header Files\MyClasses</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CleanDuplicates.cpp">
@@ -88,6 +97,9 @@
     </ClCompile>
     <ClCompile Include="ScopeView.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WinDirList.cpp">
+      <Filter>Source Files\MyClasses</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -175,6 +187,18 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="res\Toolbar256.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\dirlist.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\dirlist_hc.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\dirlist.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\dirlist_hc.bmp">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

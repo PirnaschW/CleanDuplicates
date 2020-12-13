@@ -15,6 +15,7 @@
 #define  IDR_MAINFRAME_256			129
 #define  IDR_CleanDuplicatesTYPE				130
 #define  ID_WINDOW_MANAGER			131
+#define  ID_VIEW_DIRLIST			186
 #define  ID_VIEW_FILEVIEW			133
 #define  ID_VIEW_CLASSVIEW			134
 #define  ID_PROPERTIES				135
@@ -37,10 +38,16 @@
 #define  ID_PROPERTIES1				152
 #define  ID_PROPERTIES2				153
 #define  ID_EXPAND_ALL				154
+#define  ID_DIR_ADD			    	401
+#define  ID_DIR_DEL			   	  402
+#define  ID_DIR_EXECUTE				403
+#define  IDS_DIRLIST     185
 #define  IDS_FILE_VIEW				155
 #define  IDS_CLASS_VIEW				156
 #define  IDS_OUTPUT_WND				157
 #define  IDS_PROPERTIES_WND			158
+#define  IDI_DIRLIST				187
+#define  IDI_DIRLIST_HC			188
 #define  IDI_FILE_VIEW				161
 #define  IDI_FILE_VIEW_HC			162
 #define  IDI_CLASS_VIEW				163
@@ -55,6 +62,8 @@
 #define  IDB_SORT_24					172
 #define  IDR_POPUP_SORT				173
 #define  IDR_POPUP_EXPLORER			174
+#define  IDB_DIRLIST				190
+#define  IDB_DIRLIST_HC			189
 #define  IDB_FILE_VIEW				175
 #define  IDB_FILE_VIEW_24			176
 #define  IDB_CLASS_VIEW				177

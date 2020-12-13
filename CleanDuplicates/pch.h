@@ -47,6 +47,7 @@
 #include  <vector>
 #include  <propkey.h>
 
+#include  "WndDirList.h"
 #include  "ViewTree.h"
 #include  "FileView.h"
 #include  "ScopeView.h"
