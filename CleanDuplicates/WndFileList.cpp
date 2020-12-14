@@ -9,9 +9,6 @@ namespace MyWin
   BEGIN_MESSAGE_MAP(WndFileList, CDockablePane)
     ON_WM_CREATE()
     ON_WM_SIZE()
-    ON_UPDATE_COMMAND_UI(ID_DIR_ADD, OnUpdateDirAdd)
-    ON_UPDATE_COMMAND_UI(ID_DIR_DEL, OnUpdateDirDel)
-    ON_UPDATE_COMMAND_UI(ID_DIR_EXECUTE, OnUpdateDirExecute)
     ON_WM_SETFOCUS()
     ON_WM_SETTINGCHANGE()
   END_MESSAGE_MAP()
@@ -39,7 +36,7 @@ namespace MyWin
     CString str;
     BOOL bNameValid = str.LoadString(IDS_FILELIST);
     ASSERT(bNameValid);
-    if (!Create(str, parent, CRect(0, 0,600, 50), TRUE, ID_VIEW_FILELIST, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | CBRS_LEFT | CBRS_FLOAT_MULTI))
+    if (!Create(str, parent, CRect(0, 0, 500, 50), TRUE, ID_VIEW_FILELIST, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | CBRS_LEFT | CBRS_FLOAT_MULTI))
     {
       TRACE0("Failed to create File List window\n");
       return false; // failed to create
@@ -67,11 +64,11 @@ namespace MyWin
     m_wndList.SetExtendedStyle(m_wndList.GetExtendedStyle() | LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
     SetFont();
     // define columns
-    m_wndList.InsertColumn(0, _T("Path"), LVCFMT_LEFT, 300);
-    m_wndList.InsertColumn(1, _T("Filename"), LVCFMT_RIGHT, 100);
-    m_wndList.InsertColumn(2, _T("Size"), LVCFMT_RIGHT, 100);
-    m_wndList.InsertColumn(3, _T("MD5 Hash"), LVCFMT_CENTER, 300);
-    m_wndList.InsertColumn(4, _T("Duplicate"), LVCFMT_CENTER, 50);
+    m_wndList.InsertColumn(0, _T("Path"), LVCFMT_LEFT, 400);
+    m_wndList.InsertColumn(1, _T("Filename"), LVCFMT_RIGHT, 150);
+    m_wndList.InsertColumn(2, _T("Size"), LVCFMT_RIGHT, 80);
+    m_wndList.InsertColumn(3, _T("MD5 Hash"), LVCFMT_CENTER, 100);
+    m_wndList.InsertColumn(4, _T("Duplicate"), LVCFMT_CENTER, 80);
 
     // set up tool bar
     m_wndToolBar.Create(this, AFX_DEFAULT_TOOLBAR_STYLE, IDB_FILELIST);
@@ -138,29 +135,21 @@ namespace MyWin
 
   }
 
-  void WndFileList::OnUpdateDirAdd(CCmdUI* pCmdUI) { pCmdUI->Enable(TRUE); }
-  void WndFileList::OnUpdateDirDel(CCmdUI* pCmdUI) { pCmdUI->Enable(m_wndList.GetFirstSelectedItemPosition() ? TRUE : FALSE); }
-  void WndFileList::OnUpdateDirExecute(CCmdUI* pCmdUI) { pCmdUI->Enable(m_wndList.GetItemCount() ? TRUE : FALSE); }
-
-  void WndFileList::DirAdd(const std::filesystem::directory_entry& d)
-  {
-    m_wndList.InsertItem(m_wndList.GetItemCount(), d.path().c_str());
-  }
-
-  void WndFileList::DirDelSelected(DList& dl)
-  {
-    while (POSITION pos = m_wndList.GetFirstSelectedItemPosition())
-    {
-      int i = m_wndList.GetNextSelectedItem(pos);
-      m_wndList.DeleteItem(i);
-      dl.erase(dl.begin() + i);
-    }
-  }
-
-  void WndFileList::DirSetTo(DList& dl)
+  void WndFileList::FillList(FMap& fmap)
   {
     m_wndList.DeleteAllItems();
-    for (auto& d : dl) DirAdd(d);
+
+    static wchar_t buffer[32];
+    for (auto& f : fmap)
+    {
+      auto z = m_wndList.InsertItem(m_wndList.GetItemCount(), f.second.dir.path().parent_path().wstring().c_str());
+      m_wndList.SetItemText(z, 1, f.second.dir.path().filename().wstring().c_str());
+      _ui64tow_s(f.second.dir.file_size(), buffer, 32, 10);
+      m_wndList.SetItemText(z, 2, buffer);
+      m_wndList.SetItemText(z, 3, f.second.hash.c_str());
+      m_wndList.SetItemText(z, 4, fmap.count(f.first) > 1 ? L"Duplicate" : L"Unique");
+      (theApp.callback)(nullptr, 0L, nullptr);
+    }
   }
 
 }

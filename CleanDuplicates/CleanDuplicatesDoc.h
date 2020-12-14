@@ -28,6 +28,9 @@ public:
   virtual void Dump(CDumpContext& dc) const;
 #endif
 
+public:
+  void UpdateAllViewsNow(CView* pSender = nullptr, LPARAM lHint = 0L, CObject* pHint = nullptr);  // function to update windows while working
+
 private:
   CMainFrame* GetMainFrame();
 

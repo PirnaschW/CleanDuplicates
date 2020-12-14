@@ -196,6 +196,7 @@
     <ClInclude Include="CleanDuplicatesDoc.h" />
     <ClInclude Include="CleanDuplicatesView.h" />
     <ClInclude Include="MainFrm.h" />
+    <ClInclude Include="MD5.h" />
     <ClInclude Include="OutputWnd.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="PropertiesWnd.h" />

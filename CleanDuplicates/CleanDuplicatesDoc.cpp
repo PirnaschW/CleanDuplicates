@@ -34,6 +34,9 @@ BOOL CCleanDuplicatesDoc::OnNewDocument()
 
     // TODO: add reinitialization code here
     // (SDI documents will reuse this document)
+  
+  // bind CDocument's function to update windows while working - saved at App to be callable from everywhere
+  theApp.SetUpdateCallBack(std::bind(&CCleanDuplicatesDoc::UpdateAllViewsNow, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 
   return TRUE;
 }
@@ -131,6 +134,21 @@ void CCleanDuplicatesDoc::Dump(CDumpContext& dc) const
 
 
 // CCleanDuplicatesDoc commands
+// CBGDoc commands
+void CCleanDuplicatesDoc::UpdateAllViewsNow(CView* pSender, LPARAM lHint, CObject* pHint)
+{
+  UpdateAllViews(pSender, lHint, pHint);
+  CView* v{ nullptr };
+  for (POSITION p = GetFirstViewPosition(); (v = GetNextView(p)) != nullptr; )
+    v->UpdateWindow();
+  GetMainFrame()->GetFileTree().Invalidate();
+  GetMainFrame()->GetFileTree().UpdateWindow();
+  GetMainFrame()->GetFileTree().m_wndTree.Invalidate();
+  GetMainFrame()->GetFileTree().m_wndTree.UpdateWindow();
+  GetMainFrame()->GetFileList().Invalidate();
+  GetMainFrame()->GetFileList().UpdateWindow();
+}
+
 void CCleanDuplicatesDoc::OnDirAdd()
 {
   CFolderPickerDialog dlg{};
@@ -149,9 +167,19 @@ void CCleanDuplicatesDoc::OnDirDel() { GetMainFrame()->GetDirList().DirDelSelect
 void CCleanDuplicatesDoc::OnDirExecute()
 {
   fmap_ = GetMainFrame()->GetFileTree().FillFileTree(dlist_);
+  GetMainFrame()->GetFileList().FillList(fmap_);
 }
 
 void CCleanDuplicatesDoc::OnTreeSelChanged(NMHDR* n, LRESULT* l)
 {
-
+  LPNMTREEVIEW pnmtv = (LPNMTREEVIEW) n;
+  switch (pnmtv->action)
+  {
+    case TVC_BYKEYBOARD:
+      break;
+    case TVC_BYMOUSE:
+      break;
+    default:
+      break;
+  }
 }

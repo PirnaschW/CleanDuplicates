@@ -27,6 +27,9 @@ public:
 // Implementation
  UINT m_nAppLook;
  BOOL m_bHiColorIcons;
+ inline void SetUpdateCallBack(std::function<void(CView* pSender, LPARAM lHint, CObject* pHint)> cb) { callback = cb; }
+ std::function<void(CView* pSender, LPARAM lHint, CObject* pHint)> callback;          // pointer to CDocument's callback function (to update windows while working)
+
 
  virtual void PreLoadState();
  virtual void LoadCustomState();

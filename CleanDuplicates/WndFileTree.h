@@ -12,6 +12,7 @@ namespace MyWin
     void OnChangeVisualStyle();
 
   private:
+  public:
     ToolBar m_wndToolBar;
     CTreeCtrl m_wndTree;
     CImageList m_Images;
@@ -28,6 +29,7 @@ namespace MyWin
     void CollectFiles(const std::filesystem::directory_entry& s, HTREEITEM hScope);
 
   private:
+    MD5::MD5 md5;
     std::vector<FileData> files_{};
 
   protected:

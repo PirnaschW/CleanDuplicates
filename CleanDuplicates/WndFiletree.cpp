@@ -1,4 +1,5 @@
 #include "pch.h"
+#include <sstream>
 
 namespace MyWin
 {
@@ -117,7 +118,7 @@ namespace MyWin
     AdjustLayout();
   }
 
-    void WndFileTree::OnContextMenu(CWnd* pWnd, CPoint point)
+  void WndFileTree::OnContextMenu(CWnd* pWnd, CPoint point)
   {
     CTreeCtrl* pWndTree = (CTreeCtrl*) &m_wndTree;
     ASSERT_VALID(pWndTree);
@@ -252,10 +253,11 @@ namespace MyWin
     FMap fmap{};
     for (auto& f : files_)
     {
-      fmap.insert({ f.size, f });
+      fmap.insert({ f.hash, f });
     }
     return fmap;
   }
+
 
   void WndFileTree::CollectFiles(const std::filesystem::directory_entry& s, HTREEITEM hScope)
   {
@@ -265,7 +267,10 @@ namespace MyWin
       if (p.is_regular_file())  // collect data, but don't enter in tree
       {
         std::error_code ec{};
-        FileData f{ p.path().c_str(), p.file_size(), p.last_write_time(ec) };
+
+        std::wstringstream cls;
+        cls << md5.digestFile(p.path().string().c_str());
+        FileData f{ p, cls.str() };
         if (ec) continue; // ignore all files with errors
         files_.push_back(f);
       }

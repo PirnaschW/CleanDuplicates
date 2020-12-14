@@ -12,6 +12,9 @@
 
 #include "targetver.h"
 
+
+#define _CRT_SECURE_NO_WARNINGS
+
 #define _ATL_CSTRING_EXPLICIT_CONSTRUCTORS // some CString constructors will be explicit
 
 // turns off MFC's hiding of some common and often safely ignored warning messages
@@ -47,20 +50,22 @@
 #endif
 
 #include <filesystem>
+#include <functional>
 #include <string>
 #include <vector>
 #include <unordered_map>
 #include <propkey.h>
 
+using MD5Hash = std::wstring;
 struct FileData
 {
-  std::wstring path;
-  std::uintmax_t size;
-  std::filesystem::file_time_type LastWriteTime;
+  std::filesystem::directory_entry dir;
+  MD5Hash hash;
 };
 using DList = std::vector<std::filesystem::directory_entry>;
-using FMap = std::unordered_multimap<std::uintmax_t, FileData>;
+using FMap = std::unordered_multimap<MD5Hash, FileData>;
 
+#include "MD5.h"
 #include "ToolBar.h"
 #include "WndDirList.h"
 #include "WndFiletree.h"

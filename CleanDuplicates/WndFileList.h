@@ -20,16 +20,11 @@ namespace MyWin
 
   public:
     bool CreatePane(CWnd* parent);
-    void DirAdd(const std::filesystem::directory_entry& d); // add a single dir to bottom of display
-    void DirDelSelected(DList& dl); // delete all selected from display and update given vector
-    void DirSetTo(DList& dl); // set display to given vector (useful for serialization)
+    void FillList(FMap& fmap);
 
   protected:
     afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
     afx_msg void OnSize(UINT nType, int cx, int cy);
-    afx_msg void OnUpdateDirAdd(CCmdUI* pCmdUI);
-    afx_msg void OnUpdateDirDel(CCmdUI* pCmdUI);
-    afx_msg void OnUpdateDirExecute(CCmdUI* pCmdUI);
     afx_msg void OnSetFocus(CWnd* pOldWnd);
     afx_msg void OnSettingChange(UINT uFlags, LPCTSTR lpszSection);
 
