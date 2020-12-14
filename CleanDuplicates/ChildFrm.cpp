@@ -1,60 +1,60 @@
 
-//  ChildFrm.cpp  :  implementation  of  the  CChildFrame  class
+// ChildFrm.cpp : implementation of the CChildFrame class
 //
 
-#include  "pch.h"
+#include "pch.h"
 
-#ifdef  _DEBUG
-#define  new  DEBUG_NEW
+#ifdef _DEBUG
+#define new DEBUG_NEW
 #endif
 
-//  CChildFrame
+// CChildFrame
 
-IMPLEMENT_DYNCREATE(CChildFrame,  CMDIChildWndEx)
+IMPLEMENT_DYNCREATE(CChildFrame, CMDIChildWndEx)
 
-BEGIN_MESSAGE_MAP(CChildFrame,  CMDIChildWndEx)
+BEGIN_MESSAGE_MAP(CChildFrame, CMDIChildWndEx)
 END_MESSAGE_MAP()
 
-//  CChildFrame  construction/destruction
+// CChildFrame construction/destruction
 
-CChildFrame::CChildFrame()  noexcept
+CChildFrame::CChildFrame() noexcept
 {
-	//  TODO:  add  member  initialization  code  here
+ // TODO: add member initialization code here
 }
 
 CChildFrame::~CChildFrame()
 {
 }
 
-BOOL  CChildFrame::OnCreateClient(LPCREATESTRUCT  /*lpcs*/,  CCreateContext*  pContext)
+BOOL CChildFrame::OnCreateClient(LPCREATESTRUCT /*lpcs*/, CCreateContext* pContext)
 {
-	return  m_wndSplitter.Create(this,
-		2,  2,			//  TODO:  adjust  the  number  of  rows,  columns
-		CSize(10,  10),	//  TODO:  adjust  the  minimum  pane  size
-		pContext);
+ return m_wndSplitter.Create(this,
+ 2, 2, // TODO: adjust the number of rows, columns
+ CSize(10, 10), // TODO: adjust the minimum pane size
+ pContext);
 }
 
-BOOL  CChildFrame::PreCreateWindow(CREATESTRUCT&  cs)
+BOOL CChildFrame::PreCreateWindow(CREATESTRUCT& cs)
 {
-	//  TODO:  Modify  the  Window  class  or  styles  here  by  modifying  the  CREATESTRUCT  cs
-	if(  !CMDIChildWndEx::PreCreateWindow(cs)  )
-		return  FALSE;
+ // TODO: Modify the Window class or styles here by modifying the CREATESTRUCT cs
+ if( !CMDIChildWndEx::PreCreateWindow(cs) )
+ return FALSE;
 
-	return  TRUE;
+ return TRUE;
 }
 
-//  CChildFrame  diagnostics
+// CChildFrame diagnostics
 
-#ifdef  _DEBUG
-void  CChildFrame::AssertValid()  const
+#ifdef _DEBUG
+void CChildFrame::AssertValid() const
 {
-	CMDIChildWndEx::AssertValid();
+ CMDIChildWndEx::AssertValid();
 }
 
-void  CChildFrame::Dump(CDumpContext&  dc)  const
+void CChildFrame::Dump(CDumpContext& dc) const
 {
-	CMDIChildWndEx::Dump(dc);
+ CMDIChildWndEx::Dump(dc);
 }
-#endif  //_DEBUG
+#endif //_DEBUG
 
-//  CChildFrame  message  handlers
+// CChildFrame message handlers

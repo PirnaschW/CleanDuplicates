@@ -1,35 +1,35 @@
 
-//  ChildFrm.h  :  interface  of  the  CChildFrame  class
+// ChildFrm.h : interface of the CChildFrame class
 //
 
-class  CChildFrame  :  public  CMDIChildWndEx
+class CChildFrame : public CMDIChildWndEx
 {
-	DECLARE_DYNCREATE(CChildFrame)
+ DECLARE_DYNCREATE(CChildFrame)
 public:
-	CChildFrame()  noexcept;
+ CChildFrame() noexcept;
 
-//  Attributes
+// Attributes
 protected:
-	CSplitterWndEx  m_wndSplitter;
+ CSplitterWndEx m_wndSplitter;
 public:
 
-//  Operations
+// Operations
 public:
 
-//  Overrides
-	public:
-	virtual  BOOL  OnCreateClient(LPCREATESTRUCT  lpcs,  CCreateContext*  pContext);
-	virtual  BOOL  PreCreateWindow(CREATESTRUCT&  cs);
+// Overrides
+ public:
+ virtual BOOL OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext);
+ virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 
-//  Implementation
+// Implementation
 public:
-	virtual  ~CChildFrame();
-#ifdef  _DEBUG
-	virtual  void  AssertValid()  const;
-	virtual  void  Dump(CDumpContext&  dc)  const;
+ virtual ~CChildFrame();
+#ifdef _DEBUG
+ virtual void AssertValid() const;
+ virtual void Dump(CDumpContext& dc) const;
 #endif
 
-//  Generated  message  map  functions
+// Generated message map functions
 protected:
-	DECLARE_MESSAGE_MAP()
+ DECLARE_MESSAGE_MAP()
 };

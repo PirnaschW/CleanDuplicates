@@ -1,11 +1,5 @@
-// MainFrm.cpp : implementation of the CMainFrame class
-//
 
 #include "pch.h"
-
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#endif
 
 // CMainFrame
 IMPLEMENT_DYNAMIC(CMainFrame, CMDIFrameWndEx)
@@ -26,18 +20,19 @@ END_MESSAGE_MAP()
 
 static UINT indicators[] =
 {
-  ID_SEPARATOR, // status line indicator
-  ID_INDICATOR_CAPS,
-  ID_INDICATOR_NUM,
-  ID_INDICATOR_SCRL,
+ ID_SEPARATOR, // status line indicator
+ ID_INDICATOR_CAPS,
+ ID_INDICATOR_NUM,
+ ID_INDICATOR_SCRL,
 };
 
 // CMainFrame construction/destruction
 
 CMainFrame::CMainFrame() noexcept
 {
-  // TODO: add member initialization code here
+ // TODO: add member initialization code here
   theApp.m_nAppLook = theApp.GetInt(_T("ApplicationLook"), ID_VIEW_APPLOOK_VS_2008);
+  //GetDockingManager()->DisableRestoreDockState(TRUE);
 }
 
 CMainFrame::~CMainFrame()
@@ -122,11 +117,11 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
   m_wndDirList.EnableDocking(CBRS_ALIGN_ANY);
   DockPane(&m_wndDirList);
-  m_wndFileView.EnableDocking(CBRS_ALIGN_ANY);
-  m_wndScopeView.EnableDocking(CBRS_ALIGN_ANY);
-  DockPane(&m_wndFileView);
-  CDockablePane* pTabbedBar = nullptr;
-  m_wndScopeView.AttachToTabWnd(&m_wndFileView, DM_SHOW, TRUE, &pTabbedBar);
+  m_wndFileTree.EnableDocking(CBRS_ALIGN_ANY);
+  DockPane(&m_wndFileTree);
+  m_wndFileList.EnableDocking(CBRS_ALIGN_ANY);
+  DockPane(&m_wndFileList);
+
   m_wndOutput.EnableDocking(CBRS_ALIGN_ANY);
   DockPane(&m_wndOutput);
   m_wndProperties.EnableDocking(CBRS_ALIGN_ANY);
@@ -146,7 +141,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
   if (CMFCToolBar::GetUserImages() == nullptr)
   {
-    // load user-defined toolbar images
+  // load user-defined toolbar images
     if (m_UserImages.Load(_T(".\\UserImages.bmp")))
     {
       CMFCToolBar::SetUserImages(&m_UserImages);
@@ -175,11 +170,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
   lstBasicCommands.AddTail(ID_VIEW_APPLOOK_OFF_2007_BLACK);
   lstBasicCommands.AddTail(ID_VIEW_APPLOOK_OFF_2007_AQUA);
   lstBasicCommands.AddTail(ID_VIEW_APPLOOK_WINDOWS_7);
-  lstBasicCommands.AddTail(ID_SORTING_SORTALPHABETIC);
-  lstBasicCommands.AddTail(ID_SORTING_SORTBYTYPE);
-  lstBasicCommands.AddTail(ID_SORTING_SORTBYACCESS);
-  lstBasicCommands.AddTail(ID_SORTING_GROUPBYTYPE);
-
+  
   CMFCToolBar::SetBasicCommands(lstBasicCommands);
 
   // Switch the order of document name and application name on the window title bar. This
@@ -198,37 +189,11 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
 
 BOOL CMainFrame::CreateDockingWindows()
 {
+  m_wndDirList.CreatePane(this); // Create Directory List
+  m_wndFileTree.CreatePane(this); // Create File Tree
+  m_wndFileList.CreatePane(this); // Create File List
+
   BOOL bNameValid;
-
- // Create Directory List View
-  CString strDirListView;
-  bNameValid = strDirListView.LoadString(IDS_DIRLIST);
-  ASSERT(bNameValid);
-  if (!m_wndDirList.Create(strDirListView, this, CRect(0, 0, 50, 50), TRUE, ID_VIEW_DIRLIST, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | CBRS_TOP | CBRS_FLOAT_MULTI))
-  {
-    TRACE0("Failed to create DirList View window\n");
-    return FALSE; // failed to create
-  }
-
-   // Create class view
-  CString strScopeView;
-  bNameValid = strScopeView.LoadString(IDS_CLASS_VIEW);
-  ASSERT(bNameValid);
-  if (!m_wndScopeView.Create(strScopeView, this, CRect(0, 0, 400, 400), TRUE, ID_VIEW_CLASSVIEW, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | CBRS_LEFT | CBRS_FLOAT_MULTI))
-  {
-    TRACE0("Failed to create Scope View window\n");
-    return FALSE; // failed to create
-  }
-
-  // Create file view
-  CString strFileView;
-  bNameValid = strFileView.LoadString(IDS_FILE_VIEW);
-  ASSERT(bNameValid);
-  if (!m_wndFileView.Create(strFileView, this, CRect(0, 0, 400, 400), TRUE, ID_VIEW_FILEVIEW, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | CBRS_LEFT | CBRS_FLOAT_MULTI))
-  {
-    TRACE0("Failed to create File View window\n");
-    return FALSE; // failed to create
-  }
 
   // Create output window
   CString strOutputWnd;
@@ -256,15 +221,6 @@ BOOL CMainFrame::CreateDockingWindows()
 
 void CMainFrame::SetDockingWindowIcons(BOOL bHiColorIcons)
 {
-  HICON hDirListIcon = (HICON) ::LoadImage(::AfxGetResourceHandle(), MAKEINTRESOURCE(bHiColorIcons ? IDI_DIRLIST_HC : IDI_DIRLIST), IMAGE_ICON, ::GetSystemMetrics(SM_CXSMICON), ::GetSystemMetrics(SM_CYSMICON), 0);
-  m_wndDirList.SetIcon(hDirListIcon, FALSE);
-
-  HICON hFileViewIcon = (HICON) ::LoadImage(::AfxGetResourceHandle(), MAKEINTRESOURCE(bHiColorIcons ? IDI_FILE_VIEW_HC : IDI_FILE_VIEW), IMAGE_ICON, ::GetSystemMetrics(SM_CXSMICON), ::GetSystemMetrics(SM_CYSMICON), 0);
-  m_wndFileView.SetIcon(hFileViewIcon, FALSE);
-
-  HICON hScopeViewIcon = (HICON) ::LoadImage(::AfxGetResourceHandle(), MAKEINTRESOURCE(bHiColorIcons ? IDI_CLASS_VIEW_HC : IDI_CLASS_VIEW), IMAGE_ICON, ::GetSystemMetrics(SM_CXSMICON), ::GetSystemMetrics(SM_CYSMICON), 0);
-  m_wndScopeView.SetIcon(hScopeViewIcon, FALSE);
-
   HICON hOutputBarIcon = (HICON) ::LoadImage(::AfxGetResourceHandle(), MAKEINTRESOURCE(bHiColorIcons ? IDI_OUTPUT_WND_HC : IDI_OUTPUT_WND), IMAGE_ICON, ::GetSystemMetrics(SM_CXSMICON), ::GetSystemMetrics(SM_CYSMICON), 0);
   m_wndOutput.SetIcon(hOutputBarIcon, FALSE);
 
@@ -402,7 +358,7 @@ void CMainFrame::OnUpdateApplicationLook(CCmdUI* pCmdUI)
 
 BOOL CMainFrame::LoadFrame(UINT nIDResource, DWORD dwDefaultStyle, CWnd* pParentWnd, CCreateContext* pContext)
 {
-  // base class does the real work
+ // base class does the real work
 
   if (!CMDIFrameWndEx::LoadFrame(nIDResource, dwDefaultStyle, pParentWnd, pContext))
   {

@@ -1,44 +1,52 @@
 
-//  CleanDuplicatesDoc.h  :  interface  of  the  CCleanDuplicatesDoc  class
-//
-
-class  CCleanDuplicatesDoc  :  public  CDocument
+class CCleanDuplicatesDoc : public CDocument
 {
-protected:  //  create  from  serialization  only
-	CCleanDuplicatesDoc()  noexcept;
-	DECLARE_DYNCREATE(CCleanDuplicatesDoc)
+protected: // create from serialization only
+  CCleanDuplicatesDoc() noexcept;
+  DECLARE_DYNCREATE(CCleanDuplicatesDoc)
 
-//  Attributes
+ // Attributes
 public:
 
-//  Operations
+// Operations
 public:
 
-//  Overrides
+// Overrides
 public:
-	virtual  BOOL  OnNewDocument();
-	virtual  void  Serialize(CArchive&  ar);
-#ifdef  SHARED_HANDLERS
-	virtual  void  InitializeSearchContent();
-	virtual  void  OnDrawThumbnail(CDC&  dc,  LPRECT  lprcBounds);
-#endif  //  SHARED_HANDLERS
+  virtual BOOL OnNewDocument();
+  virtual void Serialize(CArchive& ar);
+#ifdef SHARED_HANDLERS
+  virtual void InitializeSearchContent();
+  virtual void OnDrawThumbnail(CDC& dc, LPRECT lprcBounds);
+#endif // SHARED_HANDLERS
 
-//  Implementation
+// Implementation
 public:
-	virtual  ~CCleanDuplicatesDoc();
-#ifdef  _DEBUG
-	virtual  void  AssertValid()  const;
-	virtual  void  Dump(CDumpContext&  dc)  const;
+  virtual ~CCleanDuplicatesDoc();
+#ifdef _DEBUG
+  virtual void AssertValid() const;
+  virtual void Dump(CDumpContext& dc) const;
 #endif
 
-protected:
+private:
+  CMainFrame* GetMainFrame();
 
-//  Generated  message  map  functions
-protected:
-	DECLARE_MESSAGE_MAP()
+private:
+  DList dlist_{};
+  //std::vector<FileData> files_{};
+  FMap fmap_{};
 
-#ifdef  SHARED_HANDLERS
-	//  Helper  function  that  sets  search  content  for  a  Search  Handler
-	void  SetSearchContent(const  CString&  value);
-#endif  //  SHARED_HANDLERS
+ // Generated message map functions
+protected:
+  afx_msg void OnDirAdd();
+  afx_msg void OnDirDel();
+  afx_msg void OnDirExecute();
+  afx_msg void OnTreeSelChanged(NMHDR*, LRESULT*);
+//  afx_msg void OnClick(NMHDR*, LRESULT*);
+  DECLARE_MESSAGE_MAP()
+
+#ifdef SHARED_HANDLERS
+ // Helper function that sets search content for a Search Handler
+  void SetSearchContent(const CString& value);
+#endif // SHARED_HANDLERS
 };

@@ -192,27 +192,25 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="ChildFrm.h" />
-    <ClInclude Include="ScopeView.h" />
     <ClInclude Include="CleanDuplicates.h" />
     <ClInclude Include="CleanDuplicatesDoc.h" />
     <ClInclude Include="CleanDuplicatesView.h" />
-    <ClInclude Include="FileView.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="OutputWnd.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="PropertiesWnd.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="ViewTree.h" />
+    <ClInclude Include="Toolbar.h" />
     <ClInclude Include="WndDirList.h" />
+    <ClInclude Include="WndFileList.h" />
+    <ClInclude Include="WndFileTree.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ChildFrm.cpp" />
-    <ClCompile Include="ScopeView.cpp" />
     <ClCompile Include="CleanDuplicates.cpp" />
     <ClCompile Include="CleanDuplicatesDoc.cpp" />
     <ClCompile Include="CleanDuplicatesView.cpp" />
-    <ClCompile Include="FileView.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="OutputWnd.cpp" />
     <ClCompile Include="pch.cpp">
@@ -222,8 +220,10 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="PropertiesWnd.cpp" />
-    <ClCompile Include="ViewTree.cpp" />
+    <ClCompile Include="ToolBar.cpp" />
     <ClCompile Include="WinDirList.cpp" />
+    <ClCompile Include="WndFileList.cpp" />
+    <ClCompile Include="WndFileTree.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="CleanDuplicates.reg" />
@@ -233,10 +233,6 @@
     <ResourceCompile Include="CleanDuplicates.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="res\classview.bmp" />
-    <Image Include="res\classview_hc.bmp" />
-    <Image Include="res\class_view.ico" />
-    <Image Include="res\class_view_hc.ico" />
     <Image Include="res\CleanDuplicates.ico" />
     <Image Include="res\CleanDuplicatesDoc.ico" />
     <Image Include="res\dirlist.bmp" />
@@ -245,10 +241,12 @@
     <Image Include="res\dirlist_hc.ico" />
     <Image Include="res\explorer.bmp" />
     <Image Include="res\explorer_hc.bmp" />
-    <Image Include="res\fileview.bmp" />
-    <Image Include="res\fileview_hc.bmp" />
-    <Image Include="res\file_view.ico" />
-    <Image Include="res\file_view_hc.ico" />
+    <Image Include="res\filelist.bmp" />
+    <Image Include="res\filelist_hc.bmp" />
+    <Image Include="res\filetree.bmp" />
+    <Image Include="res\filetree.ico" />
+    <Image Include="res\filetree_hc.bmp" />
+    <Image Include="res\filetree_hc.ico" />
     <Image Include="res\menuimages.bmp" />
     <Image Include="res\menuimages_hc.bmp" />
     <Image Include="res\output_wnd.ico" />

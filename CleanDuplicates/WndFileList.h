@@ -2,10 +2,10 @@
 namespace MyWin
 {
 
-  class WndDirList : public CDockablePane
+  class WndFileList : public CDockablePane
   {
   public:
-    WndDirList() noexcept;
+    WndFileList() noexcept;
 
     void AdjustLayout();
 
@@ -16,7 +16,7 @@ namespace MyWin
     CFont m_fntH;
 
   public:
-    virtual ~WndDirList();
+    virtual ~WndFileList();
 
   public:
     bool CreatePane(CWnd* parent);
@@ -42,3 +42,4 @@ namespace MyWin
   };
 
 }
+
