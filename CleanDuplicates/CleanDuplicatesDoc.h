@@ -2,41 +2,31 @@
 class CCleanDuplicatesDoc : public CDocument
 {
 protected: // create from serialization only
-  CCleanDuplicatesDoc() noexcept;
+  CCleanDuplicatesDoc() noexcept {};
   DECLARE_DYNCREATE(CCleanDuplicatesDoc)
-
- // Attributes
 public:
-
-// Operations
-public:
-
-// Overrides
-public:
+  virtual ~CCleanDuplicatesDoc() {};
   virtual BOOL OnNewDocument();
   virtual void Serialize(CArchive& ar);
-#ifdef SHARED_HANDLERS
-  virtual void InitializeSearchContent();
-  virtual void OnDrawThumbnail(CDC& dc, LPRECT lprcBounds);
-#endif // SHARED_HANDLERS
-
-// Implementation
-public:
-  virtual ~CCleanDuplicatesDoc();
-#ifdef _DEBUG
-  virtual void AssertValid() const;
-  virtual void Dump(CDumpContext& dc) const;
-#endif
+  virtual void AssertValid() const { CDocument::AssertValid(); }
+  virtual void Dump(CDumpContext& dc) const { CDocument::Dump(dc); }
 
 public:
   void UpdateAllViewsNow(CView* pSender = nullptr, LPARAM lHint = 0L, CObject* pHint = nullptr);  // function to update windows while working
 
 private:
-  CMainFrame* GetMainFrame();
+  CMainFrame* GetMainFrame() { CMainFrame* p = dynamic_cast<CMainFrame*>(AfxGetMainWnd()); if (p && p->GetSafeHwnd()) return p; else throw; }
+  //void DirAdd(const std::filesystem::directory_entry& d);  // add a single dir to bottom of display
+  //void DirDelSelected(DList& dl);                          // delete all selected from display and update given vector
+  //void DirSetTo(DList& dl);                                // set display to given vector (useful for serialization)
+
+public:
+  CListCtrl* pDirList{ nullptr };
+  CTreeCtrl* pFileTree{ nullptr };
+  CListCtrl* pFileList{ nullptr };
 
 private:
   DList dlist_{};
-  //std::vector<FileData> files_{};
   FMap fmap_{};
 
  // Generated message map functions
@@ -45,11 +35,6 @@ protected:
   afx_msg void OnDirDel();
   afx_msg void OnDirExecute();
   afx_msg void OnTreeSelChanged(NMHDR*, LRESULT*);
-//  afx_msg void OnClick(NMHDR*, LRESULT*);
   DECLARE_MESSAGE_MAP()
 
-#ifdef SHARED_HANDLERS
- // Helper function that sets search content for a Search Handler
-  void SetSearchContent(const CString& value);
-#endif // SHARED_HANDLERS
 };

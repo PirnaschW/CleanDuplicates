@@ -1,60 +1,40 @@
-
-// ChildFrm.cpp : implementation of the CChildFrame class
-//
-
 #include "pch.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#endif
-
-// CChildFrame
-
 IMPLEMENT_DYNCREATE(CChildFrame, CMDIChildWndEx)
-
 BEGIN_MESSAGE_MAP(CChildFrame, CMDIChildWndEx)
 END_MESSAGE_MAP()
 
-// CChildFrame construction/destruction
+CChildFrame::CChildFrame() noexcept {}
 
-CChildFrame::CChildFrame() noexcept
-{
- // TODO: add member initialization code here
-}
-
-CChildFrame::~CChildFrame()
-{
-}
+CChildFrame::~CChildFrame() {}
 
 BOOL CChildFrame::OnCreateClient(LPCREATESTRUCT /*lpcs*/, CCreateContext* pContext)
 {
- return m_wndSplitter.Create(this,
- 2, 2, // TODO: adjust the number of rows, columns
- CSize(10, 10), // TODO: adjust the minimum pane size
- pContext);
+  CRect cr;
+  GetClientRect(&cr);
+
+  m_wndSplit1.CreateStatic(this, 2, 1); // number of rows, columns
+  m_wndSplit1.CreateView(0, 0, RUNTIME_CLASS(MyViews::ViewDirList), CSize(cr.Width(), 150), pContext);
+  m_wndSplit2.CreateStatic(&m_wndSplit1, 1, 2, WS_CHILD | WS_VISIBLE, m_wndSplit1.IdFromRowCol(1, 0));
+  m_wndSplit2.CreateView(0, 0, RUNTIME_CLASS(MyViews::ViewFileTree), CSize(400, cr.Height() - 150), pContext);
+  m_wndSplit2.CreateView(0, 1, RUNTIME_CLASS(MyViews::ViewFileList), CSize(600, cr.Height() - 150), pContext);
+  return TRUE;
 }
 
 BOOL CChildFrame::PreCreateWindow(CREATESTRUCT& cs)
 {
- // TODO: Modify the Window class or styles here by modifying the CREATESTRUCT cs
- if( !CMDIChildWndEx::PreCreateWindow(cs) )
- return FALSE;
-
- return TRUE;
+  if (!CMDIChildWndEx::PreCreateWindow(cs)) return FALSE;
+  return TRUE;
 }
-
-// CChildFrame diagnostics
 
 #ifdef _DEBUG
 void CChildFrame::AssertValid() const
 {
- CMDIChildWndEx::AssertValid();
+  CMDIChildWndEx::AssertValid();
 }
 
 void CChildFrame::Dump(CDumpContext& dc) const
 {
- CMDIChildWndEx::Dump(dc);
+  CMDIChildWndEx::Dump(dc);
 }
-#endif //_DEBUG
-
-// CChildFrame message handlers
+#endif _DEBUG

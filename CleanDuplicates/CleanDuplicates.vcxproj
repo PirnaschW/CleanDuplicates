@@ -203,9 +203,18 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Toolbar.h" />
-    <ClInclude Include="WndDirList.h" />
-    <ClInclude Include="WndFileList.h" />
-    <ClInclude Include="WndFileTree.h" />
+    <ClInclude Include="ViewDirList.h" />
+    <ClInclude Include="ViewFileList.h" />
+    <ClInclude Include="ViewFileTree.h" />
+    <ClInclude Include="WndDirList.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="WndFileList.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="WndFileTree.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ChildFrm.cpp" />
@@ -222,9 +231,18 @@
     </ClCompile>
     <ClCompile Include="PropertiesWnd.cpp" />
     <ClCompile Include="ToolBar.cpp" />
-    <ClCompile Include="WinDirList.cpp" />
-    <ClCompile Include="WndFileList.cpp" />
-    <ClCompile Include="WndFileTree.cpp" />
+    <ClCompile Include="ViewDirList.cpp" />
+    <ClCompile Include="ViewFileList.cpp" />
+    <ClCompile Include="ViewFileTree.cpp" />
+    <None Include="WinDirList.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="WndFileList.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="WndFileTree.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="CleanDuplicates.reg" />

@@ -44,6 +44,7 @@
 
 #include "afxwinappex.h"
 #include "afxdialogex.h"
+#include "afxcview.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -67,14 +68,18 @@ using FMap = std::unordered_multimap<MD5Hash, FileData>;
 
 #include "MD5.h"
 #include "ToolBar.h"
-#include "WndDirList.h"
-#include "WndFiletree.h"
-#include "WndFileList.h"
 #include "OutputWnd.h"
 #include "PropertiesWnd.h"
 #include "MainFrm.h"
+#include "CleanDuplicatesDoc.h"
+#include "ViewDirList.h"
+#include "ViewFileTree.h"
+#include "ViewFileList.h"
+
+//#include "WndDirList.h"
+//#include "WndFiletree.h"
+//#include "WndFileList.h"
 #include "ChildFrm.h"
 #include "Resource.h"
 #include "CleanDuplicates.h"
-#include "CleanDuplicatesDoc.h"
 #include "CleanDuplicatesView.h"

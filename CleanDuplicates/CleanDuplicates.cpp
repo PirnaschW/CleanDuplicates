@@ -122,7 +122,7 @@ BOOL CCleanDuplicatesApp::InitInstance()
  if (!ProcessShellCommand(cmdInfo))
  return FALSE;
  // The main window has been initialized, so show and update it
- pMainFrame->ShowWindow(SW_SHOWMAXIMIZED);
+// pMainFrame->ShowWindow(SW_SHOWMAXIMIZED);
  pMainFrame->UpdateWindow();
 
  return TRUE;
@@ -182,9 +182,15 @@ void CCleanDuplicatesApp::PreLoadState()
 {
  BOOL bNameValid;
  CString strName;
+
  bNameValid = strName.LoadString(IDS_EDIT_MENU);
  ASSERT(bNameValid);
  GetContextMenuManager()->AddMenu(strName, IDR_POPUP_EDIT);
+
+ bNameValid = strName.LoadString(IDS_DIRLIST_CONTEXT);
+ ASSERT(bNameValid);
+ GetContextMenuManager()->AddMenu(strName, IDR_DIRLIST_CONTEXT);
+
  bNameValid = strName.LoadString(IDS_EXPLORER);
  ASSERT(bNameValid);
  GetContextMenuManager()->AddMenu(strName, IDR_POPUP_EXPLORER);

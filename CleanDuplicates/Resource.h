@@ -17,15 +17,16 @@
 #define ID_WINDOW_MANAGER 131
 
 // Directory List
-#define ID_VIEW_DIRLIST      401  // View ID
-#define IDS_DIRLIST          402  // String
-#define IDI_DIRLIST          403  // Icon
-#define IDI_DIRLIST_HC       404  // Icon
+#define ID_DIRLIST           401  // View ID
+#define IDS_DIRLIST          402  // View Title
+#define IDS_DIRLIST_CONTEXT  403  // Context Menu Title
+#define IDR_DIRLIST_CONTEXT  404  // Context Menu
 #define IDB_DIRLIST          405  // Toolbar Buttons Bitmap
-#define IDB_DIRLIST_HC       406  // Toolbar Buttons Bitmap
+#define IDB_DIRLIST_HC       406  // Toolbar Buttons Bitmap High-res
 #define ID_DIR_ADD           411  // Command
 #define ID_DIR_DEL           412  // Command
-#define ID_DIR_EXECUTE       413  // Command
+#define ID_DIR_DELALL        413  // Command
+#define ID_DIR_EXECUTE       414  // Command
 
 // File Tree
 #define ID_VIEW_FILETREE     501  // View ID

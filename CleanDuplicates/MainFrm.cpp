@@ -46,13 +46,13 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
   BOOL bNameValid;
 
-  CMDITabInfo mdiTabParams;
-  mdiTabParams.m_style = CMFCTabCtrl::STYLE_3D_ONENOTE; // other styles available...
-  mdiTabParams.m_bActiveTabCloseButton = TRUE; // set to FALSE to place close button at right of tab area
-  mdiTabParams.m_bTabIcons = FALSE; // set to TRUE to enable document icons on MDI taba
-  mdiTabParams.m_bAutoColor = TRUE; // set to FALSE to disable auto-coloring of MDI tabs
-  mdiTabParams.m_bDocumentMenu = TRUE; // enable the document menu at the right edge of the tab area
-  EnableMDITabbedGroups(TRUE, mdiTabParams);
+  //CMDITabInfo mdiTabParams;
+  //mdiTabParams.m_style = CMFCTabCtrl::STYLE_3D_ONENOTE; // other styles available...
+  //mdiTabParams.m_bActiveTabCloseButton = TRUE; // set to FALSE to place close button at right of tab area
+  //mdiTabParams.m_bTabIcons = FALSE; // set to TRUE to enable document icons on MDI taba
+  //mdiTabParams.m_bAutoColor = TRUE; // set to FALSE to disable auto-coloring of MDI tabs
+  //mdiTabParams.m_bDocumentMenu = TRUE; // enable the document menu at the right edge of the tab area
+  //EnableMDITabbedGroups(TRUE, mdiTabParams);
 
   if (!m_wndMenuBar.Create(this))
   {
@@ -115,12 +115,12 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
     return -1;
   }
 
-  m_wndDirList.EnableDocking(CBRS_ALIGN_ANY);
-  DockPane(&m_wndDirList);
-  m_wndFileTree.EnableDocking(CBRS_ALIGN_ANY);
-  DockPane(&m_wndFileTree);
-  m_wndFileList.EnableDocking(CBRS_ALIGN_ANY);
-  DockPane(&m_wndFileList);
+  //m_wndDirList.EnableDocking(CBRS_ALIGN_ANY);
+  //DockPane(&m_wndDirList);
+  //m_wndFileTree.EnableDocking(CBRS_ALIGN_ANY);
+  //DockPane(&m_wndFileTree);
+  //m_wndFileList.EnableDocking(CBRS_ALIGN_ANY);
+  //DockPane(&m_wndFileList);
 
   m_wndOutput.EnableDocking(CBRS_ALIGN_ANY);
   DockPane(&m_wndOutput);
@@ -183,15 +183,15 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
 {
   if (!CMDIFrameWndEx::PreCreateWindow(cs)) return FALSE;
-  cs.style = WS_OVERLAPPED | WS_CAPTION | FWS_ADDTOTITLE | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_MAXIMIZE | WS_SYSMENU;
+  cs.style = WS_OVERLAPPED | WS_CAPTION | FWS_ADDTOTITLE | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_SYSMENU;
   return TRUE;
 }
 
 BOOL CMainFrame::CreateDockingWindows()
 {
-  m_wndDirList.CreatePane(this); // Create Directory List
-  m_wndFileTree.CreatePane(this); // Create File Tree
-  m_wndFileList.CreatePane(this); // Create File List
+  //m_wndDirList.CreatePane(this); // Create Directory List
+  //m_wndFileTree.CreatePane(this); // Create File Tree
+  //m_wndFileList.CreatePane(this); // Create File List
 
   BOOL bNameValid;
 
@@ -355,16 +355,14 @@ void CMainFrame::OnUpdateApplicationLook(CCmdUI* pCmdUI)
   pCmdUI->SetRadio(theApp.m_nAppLook == pCmdUI->m_nID);
 }
 
-
 BOOL CMainFrame::LoadFrame(UINT nIDResource, DWORD dwDefaultStyle, CWnd* pParentWnd, CCreateContext* pContext)
 {
- // base class does the real work
+  // base class does the real work
 
   if (!CMDIFrameWndEx::LoadFrame(nIDResource, dwDefaultStyle, pParentWnd, pContext))
   {
     return FALSE;
   }
-
 
   // enable customization button for all user toolbars
   BOOL bNameValid;
@@ -383,7 +381,6 @@ BOOL CMainFrame::LoadFrame(UINT nIDResource, DWORD dwDefaultStyle, CWnd* pParent
 
   return TRUE;
 }
-
 
 void CMainFrame::OnSettingChange(UINT uFlags, LPCTSTR lpszSection)
 {

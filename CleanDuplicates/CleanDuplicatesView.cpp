@@ -15,7 +15,6 @@ END_MESSAGE_MAP()
 CCleanDuplicatesView::CCleanDuplicatesView() noexcept
 {
  // TODO: add construction code here
-
 }
 
 CCleanDuplicatesView::~CCleanDuplicatesView()
