@@ -221,9 +221,9 @@ namespace MD5
     // context.
     void Update(
       unsigned char* input,   // input block
-      unsigned int inputLen) // length of input block
+      size_t inputLen) // length of input block
     {
-      unsigned int i, index, partLen;
+      size_t i, index, partLen;
 
       // Compute number of bytes mod 64
       index = (unsigned int) ((context.count[0] >> 3) & 0x3F);
@@ -307,7 +307,7 @@ namespace MD5
 
       FILE* file;
 
-      int len;
+      size_t len;
       unsigned char buffer[1024];
 
       if ((file = fopen(filename, "rb")) == NULL)
