@@ -12,7 +12,6 @@ namespace MyViews
     virtual void OnDraw(CDC* pDC);  // overridden to draw this view
     virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
     CCleanDuplicatesDoc* GetDocument() const { return dynamic_cast<CCleanDuplicatesDoc*>(m_pDocument); }
-
   protected:
     virtual void OnInitialUpdate(); // called first time after construct
     virtual BOOL OnPreparePrinting(CPrintInfo* pInfo);
@@ -20,6 +19,9 @@ namespace MyViews
     virtual void OnEndPrinting(CDC* pDC, CPrintInfo* pInfo);
     virtual void AssertValid() const { CListView::AssertValid(); }
     virtual void Dump(CDumpContext& dc) const { CListView::Dump(dc); }
+  private:
+    CFont m_fntH{};
+    void SetHeaderFont();
 
 // Generated message map functions
   protected:

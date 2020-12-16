@@ -19,6 +19,8 @@ private:
   //void DirAdd(const std::filesystem::directory_entry& d);  // add a single dir to bottom of display
   //void DirDelSelected(DList& dl);                          // delete all selected from display and update given vector
   //void DirSetTo(DList& dl);                                // set display to given vector (useful for serialization)
+  void FillFileTree(const std::filesystem::directory_entry& d);
+  void CollectFiles(const std::filesystem::directory_entry& s, HTREEITEM hScope);
 
 public:
   CListCtrl* pDirList{ nullptr };
@@ -26,6 +28,7 @@ public:
   CListCtrl* pFileList{ nullptr };
 
 private:
+  MD5::MD5 md5;
   DList dlist_{};
   FMap fmap_{};
 

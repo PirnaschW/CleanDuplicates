@@ -65,7 +65,7 @@ namespace MyWin
     SetFont();
     // define columns
     m_wndList.InsertColumn(0, _T("Path"), LVCFMT_LEFT, 400);
-    m_wndList.InsertColumn(1, _T("Filename"), LVCFMT_RIGHT, 150);
+    m_wndList.InsertColumn(1, _T("Filename"), LVCFMT_LEFT, 150);
     m_wndList.InsertColumn(2, _T("Size"), LVCFMT_RIGHT, 80);
     m_wndList.InsertColumn(3, _T("MD5 Hash"), LVCFMT_CENTER, 100);
     m_wndList.InsertColumn(4, _T("Duplicate"), LVCFMT_CENTER, 80);

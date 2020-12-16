@@ -31,6 +31,7 @@ namespace MyViews
     GetListCtrl().InsertColumn(0, _T("Starting Path"), LVCFMT_LEFT, 500);
     GetListCtrl().InsertColumn(1, _T("# of Files"), LVCFMT_RIGHT, 100);
     GetListCtrl().InsertColumn(2, _T("# of Duplicates"), LVCFMT_RIGHT, 100);
+    SetHeaderFont();
   }
 
   void ViewDirList::OnDraw(CDC* pDC)
@@ -53,6 +54,24 @@ namespace MyViews
   void ViewDirList::OnContextMenu(CWnd* pWnd, CPoint point)
   {
     theApp.GetContextMenuManager()->ShowPopupMenu(IDR_DIRLIST_CONTEXT, point.x, point.y, this, TRUE);
+  }
+
+  void ViewDirList::SetHeaderFont()
+  {
+    ::DeleteObject(m_fntH.Detach());
+
+    LOGFONT lf;
+    afxGlobalData.fontRegular.GetLogFont(&lf);
+
+    NONCLIENTMETRICS info{};
+    info.cbSize = sizeof(info);
+
+    afxGlobalData.GetNonClientMetrics(info);
+    lf.lfHeight = info.lfMenuFont.lfHeight;
+    lf.lfWeight = info.lfMenuFont.lfWeight * 2;
+    lf.lfItalic = info.lfMenuFont.lfItalic;
+    m_fntH.CreateFontIndirect(&lf);
+    GetListCtrl().GetHeaderCtrl()->SetFont(&m_fntH);
   }
 
   void ViewDirList::OnUpdateDirAdd(CCmdUI* pCmdUI) { pCmdUI->Enable(TRUE); }

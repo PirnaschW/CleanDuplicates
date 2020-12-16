@@ -55,6 +55,7 @@ void CCleanDuplicatesDoc::OnDirAdd()
   {
     std::filesystem::directory_entry d(dlg.GetPathName().GetString());
     dlist_.push_back(d);
+    FillFileTree(d);
 
     pDirList->InsertItem(pDirList->GetItemCount(), d.path().c_str());
 
@@ -74,6 +75,54 @@ void CCleanDuplicatesDoc::OnDirDel()
   assert(pDirList->GetItemCount() == dlist_.size());
   UpdateAllViews(nullptr);
 }
+
+
+void CCleanDuplicatesDoc::FillFileTree(const std::filesystem::directory_entry& d)
+{
+//// clear everything out - NO!
+//  files_.clear();
+//  m_wndTree.DeleteAllItems();
+
+  // collect all files for each starting directory
+  HTREEITEM h = pFileTree->InsertItem(d.path().c_str(), 0, 0, pFileTree->GetRootItem());
+  pFileTree->Expand(pFileTree->GetRootItem(), TVE_EXPAND);
+  CollectFiles(d, h);
+
+  //FMap fmap{};
+  //for (auto& f : files_)
+  //{
+  //  fmap.insert({ f.hash, f });
+  //}
+  //return fmap;
+}
+
+
+void CCleanDuplicatesDoc::CollectFiles(const std::filesystem::directory_entry& s, HTREEITEM hScope)
+{
+  for (auto& p : std::filesystem::directory_iterator(s, std::filesystem::directory_options::skip_permission_denied))
+  {
+
+    if (p.is_regular_file())  // collect data, but don't enter in tree
+    {
+      std::error_code ec{};
+
+      std::wstringstream cls;
+      cls << md5.digestFile(p.path().string().c_str());
+      FileData f{ p, cls.str() };
+      if (ec) continue; // ignore all files with errors
+      fmap_.insert({ cls.str(),f });
+      if (fmap_.size() % 16 == 0) UpdateAllViewsNow(nullptr);  // refresh screen
+    }
+
+    if (p.is_directory()) // enter in tree, but don't collect the directory's data
+    {
+      HTREEITEM h = pFileTree->InsertItem(p.path().filename().wstring().c_str(), 0, 0, hScope);
+      pFileTree->Expand(hScope, TVE_EXPAND);
+      CollectFiles(p, h);
+    }
+  }
+}
+
 
 void CCleanDuplicatesDoc::OnDirExecute()
 {

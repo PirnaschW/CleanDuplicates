@@ -29,7 +29,11 @@ namespace MyViews
     // define style and columns
     GetListCtrl().SetExtendedStyle(GetListCtrl().GetExtendedStyle() | LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES | LVS_EX_HEADERDRAGDROP);
     GetListCtrl().InsertColumn(0, _T("Path"), LVCFMT_LEFT, 400);
-    GetListCtrl().InsertColumn(1, _T("Filename"), LVCFMT_RIGHT, 150);
+    GetListCtrl().InsertColumn(1, _T("Filename"), LVCFMT_LEFT, 150);
+    GetListCtrl().InsertColumn(2, _T("Size"), LVCFMT_RIGHT, 80);
+    GetListCtrl().InsertColumn(3, _T("MD5 Hash"), LVCFMT_CENTER, 100);
+    GetListCtrl().InsertColumn(4, _T("Duplicate"), LVCFMT_CENTER, 80);
+    SetHeaderFont();
 
     // temporary: Add a dummy line
     GetListCtrl().InsertItem(GetListCtrl().GetItemCount(), L"Test Entry File List");
@@ -55,6 +59,24 @@ namespace MyViews
   void ViewFileList::OnContextMenu(CWnd* pWnd, CPoint point)
   {
     theApp.GetContextMenuManager()->ShowPopupMenu(IDR_POPUP_EDIT, point.x, point.y, this, TRUE);
+  }
+
+  void ViewFileList::SetHeaderFont()
+  {
+    ::DeleteObject(m_fntH.Detach());
+
+    LOGFONT lf;
+    afxGlobalData.fontRegular.GetLogFont(&lf);
+
+    NONCLIENTMETRICS info{};
+    info.cbSize = sizeof(info);
+
+    afxGlobalData.GetNonClientMetrics(info);
+    lf.lfHeight = info.lfMenuFont.lfHeight;
+    lf.lfWeight = info.lfMenuFont.lfWeight * 2;
+    lf.lfItalic = info.lfMenuFont.lfItalic;
+    m_fntH.CreateFontIndirect(&lf);
+    GetListCtrl().GetHeaderCtrl()->SetFont(&m_fntH);
   }
 
   void ViewFileList::OnUpdateDirAdd(CCmdUI* pCmdUI) { pCmdUI->Enable(TRUE); }

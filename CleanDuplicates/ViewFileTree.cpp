@@ -15,7 +15,8 @@ namespace MyViews
 
   BOOL ViewFileTree::PreCreateWindow(CREATESTRUCT& cs)
   {
-    cs.style |= TVS_DISABLEDRAGDROP | TVS_HASLINES | TVS_SHOWSELALWAYS;
+    cs.style |= TVS_FULLROWSELECT | TVS_DISABLEDRAGDROP | TVS_HASLINES | TVS_LINESATROOT | TVS_HASBUTTONS;
+    //TVS_SHOWSELALWAYS | TVS_TRACKSELECT | 
     return CTreeView::PreCreateWindow(cs);
   }
 
