@@ -54,12 +54,9 @@ void CCleanDuplicatesDoc::OnDirAdd()
   if (dlg.DoModal() == IDOK)
   {
     std::filesystem::directory_entry d(dlg.GetPathName().GetString());
-//    dlist_.push_back(d);
-    FillFileTree(d);
+    pDirList->InsertItem(pDirList->GetItemCount(), d.path().c_str());    // add to Directory List
+    FillFileTree(d);                                                     // recursively add all sub directories to File Tree
 
-    pDirList->InsertItem(pDirList->GetItemCount(), d.path().c_str());
-
-//    assert(pDirList->GetItemCount() == dlist_.size());
     UpdateAllViews(nullptr);
   }
 }
@@ -88,12 +85,18 @@ void CCleanDuplicatesDoc::FillFileTree(const std::filesystem::directory_entry& d
   pFileTree->Expand(pFileTree->GetRootItem(), TVE_EXPAND);
   CollectFiles(d, h);
 
-  //FMap fmap{};
-  //for (auto& f : files_)
-  //{
-  //  fmap.insert({ f.hash, f });
-  //}
-  //return fmap;
+// only when all files are collected can the List be populated, as the 'Unique' qualifiers change while more files are read
+  for (const auto& it : fmap_)
+  {
+    auto z = pFileList->InsertItem(pFileList->GetItemCount(), it.second.d.path().parent_path().wstring().c_str());
+    pFileList->SetItemText(z, 1, it.second.d.path().filename().wstring().c_str());
+    static wchar_t buffer[32];
+    _ui64tow_s(it.first.size, buffer, 32, 10);
+    pFileList->SetItemText(z, 2, buffer);
+    pFileList->SetItemText(z, 3, it.first.hash.c_str());
+    pFileList->SetItemText(z, 4, fmap_.count(it.first) > 1 ? L"Duplicate" : L"Unique");
+  }
+
 }
 
 
@@ -104,16 +107,8 @@ void CCleanDuplicatesDoc::CollectFiles(const std::filesystem::directory_entry& s
 
     if (d.is_regular_file())  // collect data, but don't enter in tree
     {
-      FileMap::Insert(fmap_, d);
-      //std::error_code ec{};
-
-      //std::wstringstream cls;
-      //cls << md5.digestFile(d.path().string().c_str());
-      //FileMap::FileKey fk{ d.file_size(), cls.str() };
-      //FileMap::FileData fd{ d };
-      //if (ec) continue; // ignore all files with errors
-      //fmap_.insert({ fk,fd });
-      if (fmap_.size() % 16 == 0) UpdateAllViewsNow(nullptr);  // refresh screen
+      FileMap::FMap::const_iterator it = FileMap::Insert(fmap_, d);
+      if (fmap_.size() % 16 == 0) UpdateAllViewsNow(nullptr);  // refresh screen NOW
     }
 
     if (d.is_directory()) // enter in tree, but don't collect the directory's data
