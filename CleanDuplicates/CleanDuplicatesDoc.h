@@ -28,9 +28,7 @@ public:
   CListCtrl* pFileList{ nullptr };
 
 private:
-  MD5::MD5 md5;
-  DList dlist_{};
-  FMap fmap_{};
+  FileMap::FMap fmap_{};
 
  // Generated message map functions
 protected:

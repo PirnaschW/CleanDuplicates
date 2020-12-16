@@ -58,15 +58,7 @@
 #include <unordered_map>
 #include <propkey.h>
 
-using MD5Hash = std::wstring;
-struct FileData
-{
-  std::filesystem::directory_entry dir;
-  MD5Hash hash;
-};
-using DList = std::vector<std::filesystem::directory_entry>;
-using FMap = std::unordered_multimap<MD5Hash, FileData>;
-
+#include "FileMap.h"
 #include "MD5.h"
 #include "ToolBar.h"
 #include "OutputWnd.h"
@@ -76,10 +68,6 @@ using FMap = std::unordered_multimap<MD5Hash, FileData>;
 #include "ViewDirList.h"
 #include "ViewFileTree.h"
 #include "ViewFileList.h"
-
-//#include "WndDirList.h"
-//#include "WndFiletree.h"
-//#include "WndFileList.h"
 #include "ChildFrm.h"
 #include "Resource.h"
 #include "CleanDuplicates.h"

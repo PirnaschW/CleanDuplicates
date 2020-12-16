@@ -81,6 +81,9 @@
     <ClInclude Include="ViewFileTree.h">
       <Filter>Header Files\MyClasses</Filter>
     </ClInclude>
+    <ClInclude Include="FileMap.h">
+      <Filter>Header Files\MyClasses</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CleanDuplicates.cpp">
@@ -126,6 +129,9 @@
       <Filter>Source Files\MyClasses</Filter>
     </ClCompile>
     <ClCompile Include="ViewFileTree.cpp">
+      <Filter>Source Files\MyClasses</Filter>
+    </ClCompile>
+    <ClCompile Include="FileMap.cpp">
       <Filter>Source Files\MyClasses</Filter>
     </ClCompile>
   </ItemGroup>

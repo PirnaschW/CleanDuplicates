@@ -195,6 +195,7 @@
     <ClInclude Include="CleanDuplicates.h" />
     <ClInclude Include="CleanDuplicatesDoc.h" />
     <ClInclude Include="CleanDuplicatesView.h" />
+    <ClInclude Include="FileMap.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="MD5.h" />
     <ClInclude Include="OutputWnd.h" />
@@ -221,6 +222,7 @@
     <ClCompile Include="CleanDuplicates.cpp" />
     <ClCompile Include="CleanDuplicatesDoc.cpp" />
     <ClCompile Include="CleanDuplicatesView.cpp" />
+    <ClCompile Include="FileMap.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="OutputWnd.cpp" />
     <ClCompile Include="pch.cpp">

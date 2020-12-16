@@ -12,9 +12,6 @@ namespace MyViews
     virtual void OnDraw(CDC* pDC);  // overridden to draw this view
     virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
     CCleanDuplicatesDoc* GetDocument() const { return dynamic_cast<CCleanDuplicatesDoc*>(m_pDocument); }
-    void DirAdd(const std::filesystem::directory_entry& d);  // add a single dir to bottom of display
-    void DirDelSelected(DList& dl);                          // delete all selected from display and update given vector
-    void DirSetTo(DList& dl);                                // set display to given vector (useful for serialization)
   protected:
     virtual void OnInitialUpdate(); // called first time after construct
     virtual BOOL OnPreparePrinting(CPrintInfo* pInfo);
