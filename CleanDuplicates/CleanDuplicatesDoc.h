@@ -8,8 +8,6 @@ public:
   virtual ~CCleanDuplicatesDoc() {};
   virtual BOOL OnNewDocument();
   virtual void Serialize(CArchive& ar);
-  virtual void AssertValid() const { CDocument::AssertValid(); }
-  virtual void Dump(CDumpContext& dc) const { CDocument::Dump(dc); }
 
 public:
   void UpdateAllViewsNow(CView* pSender = nullptr, LPARAM lHint = 0L, CObject* pHint = nullptr);  // function to update windows while working

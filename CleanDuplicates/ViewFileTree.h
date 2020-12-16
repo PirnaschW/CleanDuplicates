@@ -18,8 +18,6 @@ namespace MyViews
     virtual BOOL OnPreparePrinting(CPrintInfo* pInfo);
     virtual void OnBeginPrinting(CDC* pDC, CPrintInfo* pInfo);
     virtual void OnEndPrinting(CDC* pDC, CPrintInfo* pInfo);
-    virtual void AssertValid() const { CTreeView::AssertValid(); }
-    virtual void Dump(CDumpContext& dc) const { CTreeView::Dump(dc); }
 
 // Generated message map functions
   protected:

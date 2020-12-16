@@ -38,12 +38,6 @@ void CCleanDuplicatesDoc::UpdateAllViewsNow(CView* pSender, LPARAM lHint, CObjec
   CView* v{ nullptr };
   for (POSITION p = GetFirstViewPosition(); (v = GetNextView(p)) != nullptr; )
     v->UpdateWindow();
-  //GetMainFrame()->GetFileTree().Invalidate();
-  //GetMainFrame()->GetFileTree().UpdateWindow();
-  //GetMainFrame()->GetFileTree().m_wndTree.Invalidate();
-  //GetMainFrame()->GetFileTree().m_wndTree.UpdateWindow();
-  //GetMainFrame()->GetFileList().Invalidate();
-  //GetMainFrame()->GetFileList().UpdateWindow();
 }
 
 void CCleanDuplicatesDoc::OnDirAdd()
@@ -85,18 +79,19 @@ void CCleanDuplicatesDoc::FillFileTree(const std::filesystem::directory_entry& d
   pFileTree->Expand(pFileTree->GetRootItem(), TVE_EXPAND);
   CollectFiles(d, h);
 
-// only when all files are collected can the List be populated, as the 'Unique' qualifiers change while more files are read
+// only when ALL files are collected can the List be populated, as the 'Unique' qualifiers change while more files are read
   for (const auto& it : fmap_)
   {
+    size_t n = fmap_.count(it.first);
+    if (n == 1) continue; // don't show unique files
     auto z = pFileList->InsertItem(pFileList->GetItemCount(), it.second.d.path().parent_path().wstring().c_str());
     pFileList->SetItemText(z, 1, it.second.d.path().filename().wstring().c_str());
     static wchar_t buffer[32];
     _ui64tow_s(it.first.size, buffer, 32, 10);
     pFileList->SetItemText(z, 2, buffer);
     pFileList->SetItemText(z, 3, it.first.hash.c_str());
-    pFileList->SetItemText(z, 4, fmap_.count(it.first) > 1 ? L"Duplicate" : L"Unique");
+    pFileList->SetItemText(z, 4, n == 2 ? L"Duplicate" : L"Multiples");
   }
-
 }
 
 

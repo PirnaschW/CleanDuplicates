@@ -17,8 +17,6 @@ namespace MyViews
     virtual BOOL OnPreparePrinting(CPrintInfo* pInfo);
     virtual void OnBeginPrinting(CDC* pDC, CPrintInfo* pInfo);
     virtual void OnEndPrinting(CDC* pDC, CPrintInfo* pInfo);
-    virtual void AssertValid() const { CListView::AssertValid(); }
-    virtual void Dump(CDumpContext& dc) const { CListView::Dump(dc); }
   private:
     CFont m_fntH{};
     void SetHeaderFont();

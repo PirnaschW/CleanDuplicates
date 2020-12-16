@@ -110,16 +110,7 @@
     <ClCompile Include="pch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="WinDirList.cpp">
-      <Filter>Source Files\MyClasses</Filter>
-    </ClCompile>
-    <ClCompile Include="WndFileTree.cpp">
-      <Filter>Source Files\MyClasses</Filter>
-    </ClCompile>
     <ClCompile Include="ToolBar.cpp">
-      <Filter>Source Files\MyClasses</Filter>
-    </ClCompile>
-    <ClCompile Include="WndFileList.cpp">
       <Filter>Source Files\MyClasses</Filter>
     </ClCompile>
     <ClCompile Include="ViewDirList.cpp">
@@ -139,6 +130,15 @@
     <None Include="CleanDuplicates.reg" />
     <None Include="res\CleanDuplicates.rc2">
       <Filter>Resource Files</Filter>
+    </None>
+    <None Include="WinDirList.cpp">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="WndFileList.cpp">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="WndFileTree.cpp">
+      <Filter>Source Files</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
