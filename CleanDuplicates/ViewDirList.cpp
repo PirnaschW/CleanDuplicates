@@ -53,7 +53,7 @@ namespace MyViews
 
   void ViewDirList::OnContextMenu(CWnd* pWnd, CPoint point)
   {
-    theApp.GetContextMenuManager()->ShowPopupMenu(IDR_DIRLIST_CONTEXT, point.x, point.y, this, TRUE);
+    theApp.GetContextMenuManager()->ShowPopupMenu(IDR_DIRLIST, point.x, point.y, this, TRUE);
   }
 
   void ViewDirList::SetHeaderFont()

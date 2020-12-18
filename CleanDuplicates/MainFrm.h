@@ -24,19 +24,12 @@ public:
   virtual void Dump(CDumpContext& dc) const;
 #endif
 
-public:
-  //MyWin::WndDirList& GetDirList() { return m_wndDirList; }
-  //MyWin::WndFileTree& GetFileTree() { return m_wndFileTree; }
-  //MyWin::WndFileList& GetFileList() { return m_wndFileList; }
-
 protected: // control bar embedded members
   CMFCMenuBar m_wndMenuBar;
-  CMFCToolBar m_wndToolBar;
+  CMFCToolBar m_wndToolBar0;
+  CMFCToolBar m_wndToolBar1;
   CMFCStatusBar m_wndStatusBar;
   CMFCToolBarImages m_UserImages;
-  //MyWin::WndDirList m_wndDirList;
-  //MyWin::WndFileTree m_wndFileTree;
-  //MyWin::WndFileList m_wndFileList;
   COutputWnd m_wndOutput;
   CPropertiesWnd m_wndProperties;
 

@@ -257,7 +257,6 @@
     <Image Include="res\CleanDuplicates.ico" />
     <Image Include="res\CleanDuplicatesDoc.ico" />
     <Image Include="res\dirlist.bmp" />
-    <Image Include="res\dirlist_hc.bmp" />
     <Image Include="res\dirlist.ico" />
     <Image Include="res\dirlist_hc.ico" />
     <Image Include="res\explorer.bmp" />

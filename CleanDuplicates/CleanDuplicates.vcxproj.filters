@@ -150,9 +150,6 @@
     <Image Include="res\dirlist.bmp">
       <Filter>Resource Files\Bitmaps</Filter>
     </Image>
-    <Image Include="res\dirlist_hc.bmp">
-      <Filter>Resource Files\Bitmaps</Filter>
-    </Image>
     <Image Include="res\explorer.bmp">
       <Filter>Resource Files\Bitmaps</Filter>
     </Image>

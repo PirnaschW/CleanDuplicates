@@ -65,22 +65,37 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
   // prevent the menu bar from taking the focus on activation
   CMFCPopupMenu::SetForceMenuFocus(FALSE);
 
-  if (!m_wndToolBar.CreateEx(this, TBSTYLE_FLAT, WS_CHILD | WS_VISIBLE | CBRS_TOP | CBRS_GRIPPER | CBRS_TOOLTIPS | CBRS_FLYBY | CBRS_SIZE_DYNAMIC) ||
-    !m_wndToolBar.LoadToolBar(theApp.m_bHiColorIcons ? IDR_MAINFRAME_256 : IDR_MAINFRAME))
+  if (!m_wndToolBar0.CreateEx(this, TBSTYLE_FLAT, WS_CHILD | WS_VISIBLE | CBRS_TOP | CBRS_GRIPPER | CBRS_TOOLTIPS | CBRS_FLYBY | CBRS_SIZE_DYNAMIC) ||
+    !m_wndToolBar0.LoadToolBar(theApp.m_bHiColorIcons ? IDR_MAINFRAME_256 : IDR_MAINFRAME))
   {
-    TRACE0("Failed to create toolbar\n");
+    TRACE0("Failed to create toolbar 0\n");
     return -1; // fail to create
   }
 
   CString strToolBarName;
   bNameValid = strToolBarName.LoadString(IDS_TOOLBAR_STANDARD);
   ASSERT(bNameValid);
-  m_wndToolBar.SetWindowText(strToolBarName);
+  m_wndToolBar0.SetWindowText(strToolBarName);
 
   CString strCustomize;
   bNameValid = strCustomize.LoadString(IDS_TOOLBAR_CUSTOMIZE);
   ASSERT(bNameValid);
-  m_wndToolBar.EnableCustomizeButton(TRUE, ID_VIEW_CUSTOMIZE, strCustomize);
+  m_wndToolBar0.EnableCustomizeButton(TRUE, ID_VIEW_CUSTOMIZE, strCustomize);
+
+
+  if (!m_wndToolBar1.CreateEx(this, TBSTYLE_FLAT, WS_CHILD | WS_VISIBLE | CBRS_TOP | CBRS_GRIPPER | CBRS_TOOLTIPS | CBRS_FLYBY | CBRS_SIZE_DYNAMIC, CRect(1, 1, 1, 1), IDR_DIRLIST) ||
+    !m_wndToolBar1.LoadToolBar(IDR_DIRLIST))
+  {
+    TRACE0("Failed to create Directory List toolbar\n");
+    return -1; // fail to create
+  }
+  bNameValid = strToolBarName.LoadString(IDS_DIRLIST);
+  ASSERT(bNameValid);
+  m_wndToolBar1.SetWindowText(strToolBarName);
+
+  bNameValid = strCustomize.LoadString(IDS_TOOLBAR_CUSTOMIZE);
+  ASSERT(bNameValid);
+  m_wndToolBar1.EnableCustomizeButton(TRUE, ID_VIEW_CUSTOMIZE, strCustomize);
 
   // Allow user-defined toolbars operations:
   InitUserToolbars(nullptr, uiFirstUserToolBarId, uiLastUserToolBarId);
@@ -94,10 +109,12 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
   // TODO: Delete these five lines if you don't want the toolbar and menubar to be dockable
   m_wndMenuBar.EnableDocking(CBRS_ALIGN_ANY);
-  m_wndToolBar.EnableDocking(CBRS_ALIGN_ANY);
+  m_wndToolBar0.EnableDocking(CBRS_ALIGN_ANY);
+  m_wndToolBar1.EnableDocking(CBRS_ALIGN_ANY);
   EnableDocking(CBRS_ALIGN_ANY);
   DockPane(&m_wndMenuBar);
-  DockPane(&m_wndToolBar);
+  DockPane(&m_wndToolBar0, AFX_IDW_DOCKBAR_TOP);
+  DockPane(&m_wndToolBar1, AFX_IDW_DOCKBAR_TOP);
 
 
   // enable Visual Studio 2005 style docking window behavior

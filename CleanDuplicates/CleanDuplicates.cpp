@@ -187,9 +187,9 @@ void CCleanDuplicatesApp::PreLoadState()
  ASSERT(bNameValid);
  GetContextMenuManager()->AddMenu(strName, IDR_POPUP_EDIT);
 
- bNameValid = strName.LoadString(IDS_DIRLIST_CONTEXT);
+ bNameValid = strName.LoadString(IDS_DIRLIST);
  ASSERT(bNameValid);
- GetContextMenuManager()->AddMenu(strName, IDR_DIRLIST_CONTEXT);
+ GetContextMenuManager()->AddMenu(strName, IDR_DIRLIST);
 
  bNameValid = strName.LoadString(IDS_EXPLORER);
  ASSERT(bNameValid);
