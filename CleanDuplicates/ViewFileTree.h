@@ -9,9 +9,10 @@ namespace MyViews
     DECLARE_DYNCREATE(ViewFileTree)
   public:
     virtual ~ViewFileTree() {}
-    virtual void OnDraw(CDC* pDC);  // overridden to draw this view
     virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
     CCleanDuplicatesDoc* GetDocument() const { return dynamic_cast<CCleanDuplicatesDoc*>(m_pDocument); }
+    bool DirAdd(const std::wstring& s);
+    bool DirDel(const std::wstring& s);
 
   protected:
     virtual void OnInitialUpdate(); // called first time after construct

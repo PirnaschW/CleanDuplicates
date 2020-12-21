@@ -3,9 +3,6 @@
 
 IMPLEMENT_DYNCREATE(CCleanDuplicatesDoc, CDocument)
 BEGIN_MESSAGE_MAP(CCleanDuplicatesDoc, CDocument)
-  ON_COMMAND(ID_DIR_ADD, OnDirAdd)
-  ON_COMMAND(ID_DIR_DEL, OnDirDel)
-  ON_COMMAND(ID_DIR_EXECUTE, OnDirExecute)
   ON_NOTIFY(TVN_SELCHANGED, ID_VIEW_FILETREE, OnTreeSelChanged)
 END_MESSAGE_MAP()
 
@@ -19,15 +16,18 @@ BOOL CCleanDuplicatesDoc::OnNewDocument()
   return TRUE;
 }
 
+
+
+
 void CCleanDuplicatesDoc::Serialize(CArchive& ar)
 {
   if (ar.IsStoring())
   {
-  // TODO: add storing code here
+    ar << dirlist_;
   }
   else
   {
-  // TODO: add loading code here
+    ar >> dirlist_;
   }
 }
 
@@ -40,66 +40,67 @@ void CCleanDuplicatesDoc::UpdateAllViewsNow(CView* pSender, LPARAM lHint, CObjec
     v->UpdateWindow();
 }
 
-void CCleanDuplicatesDoc::OnDirAdd()
-{
-  CFolderPickerDialog dlg{};
-  dlg.m_ofn.lpstrTitle = _T("Select Path");
-  dlg.m_ofn.lpstrInitialDir = _T("D:\\Projects\\");
-  if (dlg.DoModal() == IDOK)
-  {
-    std::filesystem::directory_entry d(dlg.GetPathName().GetString());
-    pDirList->InsertItem(pDirList->GetItemCount(), d.path().c_str());    // add to Directory List
-    FillFileTree(d);                                                     // recursively add all sub directories to File Tree
 
-    UpdateAllViews(nullptr);
+bool CCleanDuplicatesDoc::DirAdd(const std::wstring& s)
+{
+  if (std::find(dirlist_.cbegin(), dirlist_.cend(), s) != dirlist_.cend())
+  {
+    AfxMessageBox(L"already in the list!");
+    return false;
   }
+  dirlist_.push_back(s);
+  return true;
 }
 
-void CCleanDuplicatesDoc::OnDirDel()
+bool CCleanDuplicatesDoc::DirDel(const std::wstring& s)
 {
-  while (POSITION pos = pDirList->GetFirstSelectedItemPosition())
+  auto it = std::find(dirlist_.cbegin(), dirlist_.cend(), s);
+  if (it == dirlist_.cend())
   {
-    int i = pDirList->GetNextSelectedItem(pos);
-    pDirList->DeleteItem(i);
- //   dlist_.erase(dlist_.begin() + i);
+    AfxMessageBox(L"not in the list!");
+    return false;
   }
-//  assert(pDirList->GetItemCount() == dlist_.size());
-  UpdateAllViews(nullptr);
+  dirlist_.erase(it);
+  return true;
 }
 
-
-void CCleanDuplicatesDoc::FillFileTree(const std::filesystem::directory_entry& d)
+void CCleanDuplicatesDoc::TreeAdd(const std::wstring& s)
 {
-//// clear everything out - NO!
-//  files_.clear();
-//  m_wndTree.DeleteAllItems();
-
-  // collect all files for each starting directory
-  HTREEITEM h = pFileTree->InsertItem(d.path().c_str(), 0, 0, pFileTree->GetRootItem());
+  // add a new main item, and collect all files below the the new starting directory
+  assert(pFileTree != nullptr);
+  HTREEITEM h = pFileTree->InsertItem(s.c_str(), 0, 0, pFileTree->GetRootItem());
   pFileTree->Expand(pFileTree->GetRootItem(), TVE_EXPAND);
-  CollectFiles(d, h);
+  CWaitCursor CouldTakeAWhile;
+  CollectFiles(std::filesystem::directory_entry(s), h);
+}
 
-// only when ALL files are collected can the List be populated, as the 'Unique' qualifiers change while more files are read
-  for (const auto& it : fmap_)
+void CCleanDuplicatesDoc::TreeDel(const std::wstring& s)
+{
+  // remove starting directory and all below
+  assert(pFileTree != nullptr);
+
+  HTREEITEM hRoot = pFileTree->GetRootItem();
+  for (HTREEITEM hItem = pFileTree->GetChildItem(hRoot); hItem != NULL; hItem = pFileTree->GetNextSiblingItem(hItem))
   {
-    size_t n = fmap_.count(it.first);
-    if (n == 1) continue; // don't show unique files
-    auto z = pFileList->InsertItem(pFileList->GetItemCount(), it.second.d.path().parent_path().wstring().c_str());
-    pFileList->SetItemText(z, 1, it.second.d.path().filename().wstring().c_str());
-    static wchar_t buffer[32];
-    _ui64tow_s(it.first.size, buffer, 32, 10);
-    pFileList->SetItemText(z, 2, buffer);
-    pFileList->SetItemText(z, 3, it.first.hash.c_str());
-    pFileList->SetItemText(z, 4, n == 2 ? L"Duplicate" : L"Multiples");
+    // check whether the current item is the searched one
+    if (pFileTree->GetItemText(hItem).GetString() == s)
+      pFileTree->DeleteItem(hItem);
+  }
+
+  size_t len = s.length();
+  for (FileMap::FMap::iterator it = fmap_.begin(); it != fmap_.end();)
+  {
+    if (it->second.d.path().wstring().substr(0,len) == s)
+      it = fmap_.erase(it);
+    else it++;
   }
 }
 
-
+// recursive function to collect content of one directory (calls itself for all sub-directories)
 void CCleanDuplicatesDoc::CollectFiles(const std::filesystem::directory_entry& s, HTREEITEM hScope)
 {
   for (auto& d : std::filesystem::directory_iterator(s, std::filesystem::directory_options::skip_permission_denied))
   {
-
     if (d.is_regular_file())  // collect data, but don't enter in tree
     {
       FileMap::FMap::const_iterator it = FileMap::Insert(fmap_, d);
@@ -115,12 +116,24 @@ void CCleanDuplicatesDoc::CollectFiles(const std::filesystem::directory_entry& s
   }
 }
 
-
-void CCleanDuplicatesDoc::OnDirExecute()
+void CCleanDuplicatesDoc::ListRebuild()
 {
-  //fmap_ = GetMainFrame()->GetFileTree().FillFileTree(dlist_);
-  //GetMainFrame()->GetFileList().FillList(fmap_);
+  pFileList->DeleteAllItems();
+  for (const auto& it : fmap_)
+  {
+    size_t n = fmap_.count(it.first);
+    if (n == 1) continue; // don't show unique files
+    auto z = pFileList->InsertItem(pFileList->GetItemCount(), it.second.d.path().parent_path().wstring().c_str());
+    pFileList->SetItemText(z, 1, it.second.d.path().filename().wstring().c_str());
+    static wchar_t buffer[32];
+    _ui64tow_s(it.first.size, buffer, 32, 10);
+    pFileList->SetItemText(z, 2, buffer);
+    pFileList->SetItemText(z, 3, it.first.hash.c_str());
+    pFileList->SetItemText(z, 4, n == 2 ? L"Duplicate" : L"Multiples");
+  }
 }
+
+
 
 void CCleanDuplicatesDoc::OnTreeSelChanged(NMHDR* n, LRESULT* l)
 {
@@ -135,3 +148,4 @@ void CCleanDuplicatesDoc::OnTreeSelChanged(NMHDR* n, LRESULT* l)
       break;
   }
 }
+

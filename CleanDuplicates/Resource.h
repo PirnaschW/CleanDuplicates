@@ -23,7 +23,6 @@
 #define ID_DIR_ADD                     411  // Command
 #define ID_DIR_DEL                     412  // Command
 #define ID_DIR_DELALL                  413  // Command
-#define ID_DIR_EXECUTE                 414  // Command
                                       
 // File Tree                          
 #define ID_VIEW_FILETREE               501  // View ID
@@ -34,12 +33,11 @@
 #define IDB_FILETREE_HC                506  // Toolbar Buttons Bitmap
                                       
 // File List                          
-#define ID_VIEW_FILELIST               601  // View ID
+#define ID_FILELIST                    601  // View ID
 #define IDS_FILELIST                   602  // String
-#define IDI_FILELIST                   603  // Icon
-#define IDI_FILELIST_HC                604  // Icon
-#define IDB_FILELIST                   605  // Toolbar Buttons Bitmap
-#define IDB_FILELIST_HC                606  // Toolbar Buttons Bitmap
+#define IDR_FILELIST                   603  // Menu ID, Toolbar Resource ID, Button Bitmap
+#define ID_LIST_SORT                   611  // Command
+#define ID_LIST_DUPL                   612  // Command
 
 #define ID_PROPERTIES 135
 #define ID_OPEN 136

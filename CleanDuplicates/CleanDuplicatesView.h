@@ -1,4 +1,7 @@
 
+
+#ifdef TRASH
+
 class CCleanDuplicatesView : public CView
 {
 protected: // create from serialization only
@@ -42,4 +45,6 @@ inline CCleanDuplicatesDoc* CCleanDuplicatesView::GetDocument() const
 {
   return reinterpret_cast<CCleanDuplicatesDoc*>(m_pDocument);
 }
+#endif
+
 #endif

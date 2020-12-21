@@ -84,6 +84,12 @@
     <ClInclude Include="FileMap.h">
       <Filter>Header Files\MyClasses</Filter>
     </ClInclude>
+    <ClInclude Include="Archive.h">
+      <Filter>Header Files\MyClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="Header.h">
+      <Filter>Source Files\MyClasses</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CleanDuplicates.cpp">
@@ -123,6 +129,9 @@
       <Filter>Source Files\MyClasses</Filter>
     </ClCompile>
     <ClCompile Include="FileMap.cpp">
+      <Filter>Source Files\MyClasses</Filter>
+    </ClCompile>
+    <ClCompile Include="Archive.cpp">
       <Filter>Source Files\MyClasses</Filter>
     </ClCompile>
   </ItemGroup>

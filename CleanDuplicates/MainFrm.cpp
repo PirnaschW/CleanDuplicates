@@ -83,19 +83,34 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
   m_wndToolBar0.EnableCustomizeButton(TRUE, ID_VIEW_CUSTOMIZE, strCustomize);
 
 
-  if (!m_wndToolBar1.CreateEx(this, TBSTYLE_FLAT, WS_CHILD | WS_VISIBLE | CBRS_TOP | CBRS_GRIPPER | CBRS_TOOLTIPS | CBRS_FLYBY | CBRS_SIZE_DYNAMIC, CRect(1, 1, 1, 1), IDR_DIRLIST) ||
-    !m_wndToolBar1.LoadToolBar(IDR_DIRLIST))
+  if (!m_wndToolBarDirList.CreateEx(this, TBSTYLE_FLAT, WS_CHILD | WS_VISIBLE | CBRS_TOP | CBRS_GRIPPER | CBRS_TOOLTIPS | CBRS_FLYBY | CBRS_SIZE_DYNAMIC, CRect(1, 1, 1, 1), IDR_DIRLIST) ||
+    !m_wndToolBarDirList.LoadToolBar(IDR_DIRLIST))
   {
     TRACE0("Failed to create Directory List toolbar\n");
     return -1; // fail to create
   }
   bNameValid = strToolBarName.LoadString(IDS_DIRLIST);
   ASSERT(bNameValid);
-  m_wndToolBar1.SetWindowText(strToolBarName);
+  m_wndToolBarDirList.SetWindowText(strToolBarName);
 
   bNameValid = strCustomize.LoadString(IDS_TOOLBAR_CUSTOMIZE);
   ASSERT(bNameValid);
-  m_wndToolBar1.EnableCustomizeButton(TRUE, ID_VIEW_CUSTOMIZE, strCustomize);
+  m_wndToolBarDirList.EnableCustomizeButton(TRUE, ID_VIEW_CUSTOMIZE, strCustomize);
+
+
+  if (!m_wndToolBarFileList.CreateEx(this, TBSTYLE_FLAT, WS_CHILD | WS_VISIBLE | CBRS_TOP | CBRS_GRIPPER | CBRS_TOOLTIPS | CBRS_FLYBY | CBRS_SIZE_DYNAMIC, CRect(1, 1, 1, 1), IDR_FILELIST) ||
+    !m_wndToolBarFileList.LoadToolBar(IDR_FILELIST))
+  {
+    TRACE0("Failed to create File List toolbar\n");
+    return -1; // fail to create
+  }
+  bNameValid = strToolBarName.LoadString(IDS_FILELIST);
+  ASSERT(bNameValid);
+  m_wndToolBarFileList.SetWindowText(strToolBarName);
+
+  bNameValid = strCustomize.LoadString(IDS_TOOLBAR_CUSTOMIZE);
+  ASSERT(bNameValid);
+  m_wndToolBarFileList.EnableCustomizeButton(TRUE, ID_VIEW_CUSTOMIZE, strCustomize);
 
   // Allow user-defined toolbars operations:
   InitUserToolbars(nullptr, uiFirstUserToolBarId, uiLastUserToolBarId);
@@ -107,14 +122,15 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
   }
   m_wndStatusBar.SetIndicators(indicators, sizeof(indicators) / sizeof(UINT));
 
-  // TODO: Delete these five lines if you don't want the toolbar and menubar to be dockable
   m_wndMenuBar.EnableDocking(CBRS_ALIGN_ANY);
   m_wndToolBar0.EnableDocking(CBRS_ALIGN_ANY);
-  m_wndToolBar1.EnableDocking(CBRS_ALIGN_ANY);
+  m_wndToolBarDirList.EnableDocking(CBRS_ALIGN_ANY);
+  m_wndToolBarFileList.EnableDocking(CBRS_ALIGN_ANY);
   EnableDocking(CBRS_ALIGN_ANY);
   DockPane(&m_wndMenuBar);
   DockPane(&m_wndToolBar0, AFX_IDW_DOCKBAR_TOP);
-  DockPane(&m_wndToolBar1, AFX_IDW_DOCKBAR_TOP);
+  DockPane(&m_wndToolBarDirList, AFX_IDW_DOCKBAR_TOP);
+  DockPane(&m_wndToolBarFileList, AFX_IDW_DOCKBAR_TOP);
 
 
   // enable Visual Studio 2005 style docking window behavior
@@ -131,13 +147,6 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
     TRACE0("Failed to create docking windows\n");
     return -1;
   }
-
-  //m_wndDirList.EnableDocking(CBRS_ALIGN_ANY);
-  //DockPane(&m_wndDirList);
-  //m_wndFileTree.EnableDocking(CBRS_ALIGN_ANY);
-  //DockPane(&m_wndFileTree);
-  //m_wndFileList.EnableDocking(CBRS_ALIGN_ANY);
-  //DockPane(&m_wndFileList);
 
   m_wndOutput.EnableDocking(CBRS_ALIGN_ANY);
   DockPane(&m_wndOutput);
@@ -187,7 +196,12 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
   lstBasicCommands.AddTail(ID_VIEW_APPLOOK_OFF_2007_BLACK);
   lstBasicCommands.AddTail(ID_VIEW_APPLOOK_OFF_2007_AQUA);
   lstBasicCommands.AddTail(ID_VIEW_APPLOOK_WINDOWS_7);
-  
+  lstBasicCommands.AddTail(ID_DIR_ADD);
+  lstBasicCommands.AddTail(ID_DIR_DEL);
+  lstBasicCommands.AddTail(ID_DIR_DELALL);
+  lstBasicCommands.AddTail(ID_LIST_SORT);
+  lstBasicCommands.AddTail(ID_LIST_DUPL);
+
   CMFCToolBar::SetBasicCommands(lstBasicCommands);
 
   // Switch the order of document name and application name on the window title bar. This
@@ -206,10 +220,6 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
 
 BOOL CMainFrame::CreateDockingWindows()
 {
-  //m_wndDirList.CreatePane(this); // Create Directory List
-  //m_wndFileTree.CreatePane(this); // Create File Tree
-  //m_wndFileList.CreatePane(this); // Create File List
-
   BOOL bNameValid;
 
   // Create output window

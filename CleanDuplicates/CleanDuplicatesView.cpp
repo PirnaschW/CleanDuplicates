@@ -1,5 +1,7 @@
 #include "pch.h"
 
+#ifdef TRASH
+
 // CCleanDuplicatesView
 IMPLEMENT_DYNCREATE(CCleanDuplicatesView, CView)
 
@@ -102,3 +104,4 @@ CCleanDuplicatesDoc* CCleanDuplicatesView::GetDocument() const // non-debug vers
 }
 #endif //_DEBUG
 
+#endif

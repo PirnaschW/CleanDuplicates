@@ -9,7 +9,6 @@ namespace MyViews
     DECLARE_DYNCREATE(ViewFileList)
   public:
     virtual ~ViewFileList() {}
-    virtual void OnDraw(CDC* pDC);  // overridden to draw this view
     virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
     CCleanDuplicatesDoc* GetDocument() const { return dynamic_cast<CCleanDuplicatesDoc*>(m_pDocument); }
   protected:

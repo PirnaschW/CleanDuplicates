@@ -20,20 +20,22 @@ namespace MyViews
     return CTreeView::PreCreateWindow(cs);
   }
 
-  void ViewFileTree::OnInitialUpdate() {
+  void ViewFileTree::OnInitialUpdate()
+  {
     CTreeView::OnInitialUpdate();
-    GetDocument()->pFileTree = &GetTreeCtrl();
 
     // define tree root
     HTREEITEM hRoot = GetTreeCtrl().InsertItem(_T("File Tree"), 0, 0);
     GetTreeCtrl().SetItemState(hRoot, TVIS_BOLD, TVIS_BOLD);
     GetTreeCtrl().Expand(hRoot, TVE_EXPAND);
-  }
 
-  void ViewFileTree::OnDraw(CDC* pDC)
-  {
-    CCleanDuplicatesDoc* pDoc = GetDocument();
-    ASSERT_VALID(pDoc);
+    // tell the document about the tree contorl, so it can directly fill it
+    assert(GetDocument()->pFileTree == nullptr);
+    GetDocument()->pFileTree = &GetTreeCtrl();
+
+    // if this is a document loaded from file, we need to update the control with the data - Serialization doesn't do that
+    for (size_t i = 0; i < GetDocument()->dirlist_.size(); ++i)
+      GetDocument()->TreeAdd(GetDocument()->dirlist_[i].c_str());     // add to Tree Ctrl
   }
 
   void ViewFileTree::OnFilePrintPreview() { AFXPrintPreview(this); }

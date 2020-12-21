@@ -58,6 +58,7 @@
 #include <unordered_map>
 #include <propkey.h>
 
+#include "Archive.h"
 #include "FileMap.h"
 #include "MD5.h"
 #include "ToolBar.h"

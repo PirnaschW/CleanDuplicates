@@ -191,11 +191,13 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Archive.h" />
     <ClInclude Include="ChildFrm.h" />
     <ClInclude Include="CleanDuplicates.h" />
     <ClInclude Include="CleanDuplicatesDoc.h" />
     <ClInclude Include="CleanDuplicatesView.h" />
     <ClInclude Include="FileMap.h" />
+    <ClInclude Include="Header.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="MD5.h" />
     <ClInclude Include="OutputWnd.h" />
@@ -218,6 +220,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Archive.cpp" />
     <ClCompile Include="ChildFrm.cpp" />
     <ClCompile Include="CleanDuplicates.cpp" />
     <ClCompile Include="CleanDuplicatesDoc.cpp" />

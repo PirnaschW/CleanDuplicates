@@ -10,9 +10,6 @@ namespace MyViews
     ON_COMMAND(ID_FILE_PRINT_PREVIEW, &ViewFileList::OnFilePrintPreview)
     ON_WM_CONTEXTMENU()
     ON_WM_RBUTTONUP()
-    ON_UPDATE_COMMAND_UI(ID_DIR_ADD, OnUpdateDirAdd)
-    ON_UPDATE_COMMAND_UI(ID_DIR_DEL, OnUpdateDirDel)
-    ON_UPDATE_COMMAND_UI(ID_DIR_EXECUTE, OnUpdateDirExecute)
   END_MESSAGE_MAP()
 
 
@@ -22,9 +19,9 @@ namespace MyViews
     return CListView::PreCreateWindow(cs);
   }
 
-  void ViewFileList::OnInitialUpdate() {
+  void ViewFileList::OnInitialUpdate()
+  {
     CListView::OnInitialUpdate();
-    GetDocument()->pFileList = &GetListCtrl();
 
     // define style and columns
     GetListCtrl().SetExtendedStyle(GetListCtrl().GetExtendedStyle() | LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES | LVS_EX_HEADERDRAGDROP);
@@ -35,14 +32,13 @@ namespace MyViews
     GetListCtrl().InsertColumn(4, _T("Duplicate"), LVCFMT_CENTER, 80);
     SetHeaderFont();
 
-    // temporary: Add a dummy line
-    GetListCtrl().InsertItem(GetListCtrl().GetItemCount(), L"Test Entry File List");
-  }
+    // tell the document about the list control, so it can directly fill it
+    assert(GetDocument()->pFileList == nullptr);
+    GetDocument()->pFileList = &GetListCtrl();
 
-  void ViewFileList::OnDraw(CDC* pDC)
-  {
-    CCleanDuplicatesDoc* pDoc = GetDocument();
-    ASSERT_VALID(pDoc);
+    // if this is a document loaded from file, we need to update the control with the data - Serialization doesn't do that
+    GetDocument()->ListRebuild();     // add data to List Ctrl
+
   }
 
   void ViewFileList::OnFilePrintPreview() { AFXPrintPreview(this); }
