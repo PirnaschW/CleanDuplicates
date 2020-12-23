@@ -207,7 +207,7 @@
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Toolbar.h" />
     <ClInclude Include="ViewDirList.h" />
-    <ClInclude Include="ViewFileList.h" />
+    <ClInclude Include="ViewFileList0.h" />
     <ClInclude Include="ViewFileTree.h" />
     <ClInclude Include="WndDirList.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
@@ -237,7 +237,11 @@
     <ClCompile Include="PropertiesWnd.cpp" />
     <ClCompile Include="ToolBar.cpp" />
     <ClCompile Include="ViewDirList.cpp" />
+    <None Include="ViewFileList0.cpp" />
     <ClCompile Include="ViewFileList.cpp" />
+    <ClInclude Include="ViewFileList.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
     <ClCompile Include="ViewFileTree.cpp" />
     <None Include="WinDirList.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
@@ -265,10 +269,8 @@
     <Image Include="res\explorer.bmp" />
     <Image Include="res\explorer_hc.bmp" />
     <Image Include="res\filelist.bmp" />
-    <Image Include="res\filelist_hc.bmp" />
-    <Image Include="res\filetree.bmp" />
     <Image Include="res\filetree.ico" />
-    <Image Include="res\filetree_hc.bmp" />
+    <Image Include="res\filetree.bmp" />
     <Image Include="res\filetree_hc.ico" />
     <Image Include="res\menuimages.bmp" />
     <Image Include="res\menuimages_hc.bmp" />

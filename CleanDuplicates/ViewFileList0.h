@@ -2,15 +2,14 @@
 namespace MyViews
 {
 
-  class ViewFileList : public CView
+  class ViewFileList0 : public CListView
   {
   protected:
-    inline ViewFileList() noexcept {};
-    DECLARE_DYNCREATE(ViewFileList)
+    inline ViewFileList0() noexcept {};
+    DECLARE_DYNCREATE(ViewFileList0)
   public:
-    virtual ~ViewFileList() {}
+    virtual ~ViewFileList0() {}
     virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
-    virtual void OnDraw(CDC* pDC);
     CCleanDuplicatesDoc* GetDocument() const { return dynamic_cast<CCleanDuplicatesDoc*>(m_pDocument); }
   protected:
     virtual void OnInitialUpdate(); // called first time after construct
@@ -20,24 +19,15 @@ namespace MyViews
   private:
     CFont m_fntH{};
     void SetHeaderFont();
-    CListCtrl m_List;
-    CImageList m_ImageList;
-    CToolBarCtrl m_ToolBar;
 
 // Generated message map functions
   protected:
     afx_msg void OnFilePrintPreview();
-    afx_msg void OnSize(UINT nType, int cx, int cy);
     afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
     afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
-    afx_msg void OnUpdateFileSort(CCmdUI* pCmdUI);
-    afx_msg void OnUpdateFileDupl(CCmdUI* pCmdUI);
-    afx_msg void OnUpdateFileMark(CCmdUI* pCmdUI);
-    afx_msg void OnUpdateFileDel(CCmdUI* pCmdUI);
-    afx_msg void OnFileSort();
-    afx_msg void OnFileDupl();
-    afx_msg void OnFileMark();
-    afx_msg void OnFileDel();
+    afx_msg void OnUpdateDirAdd(CCmdUI* pCmdUI);
+    afx_msg void OnUpdateDirDel(CCmdUI* pCmdUI);
+    afx_msg void OnUpdateDirExecute(CCmdUI* pCmdUI);
     DECLARE_MESSAGE_MAP()
   };
 

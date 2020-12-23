@@ -36,8 +36,11 @@
 #define ID_FILELIST                    601  // View ID
 #define IDS_FILELIST                   602  // String
 #define IDR_FILELIST                   603  // Menu ID, Toolbar Resource ID, Button Bitmap
+#define IDC_FILELIST                   604  // List Control ID
 #define ID_LIST_SORT                   611  // Command
 #define ID_LIST_DUPL                   612  // Command
+#define ID_LIST_MARK                   613  // Command
+#define ID_LIST_DEL                    614  // Command
 
 #define ID_PROPERTIES 135
 #define ID_OPEN 136

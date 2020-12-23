@@ -70,7 +70,7 @@ void CCleanDuplicatesDoc::TreeAdd(const std::wstring& s)
   assert(pFileTree != nullptr);
   HTREEITEM h = pFileTree->InsertItem(s.c_str(), 0, 0, pFileTree->GetRootItem());
   pFileTree->Expand(pFileTree->GetRootItem(), TVE_EXPAND);
-  CWaitCursor CouldTakeAWhile;
+  CWaitCursor ThisCouldTakeAWhile;
   CollectFiles(std::filesystem::directory_entry(s), h);
 }
 

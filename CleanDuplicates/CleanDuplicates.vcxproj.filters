@@ -75,9 +75,6 @@
     <ClInclude Include="ViewDirList.h">
       <Filter>Header Files\MyClasses</Filter>
     </ClInclude>
-    <ClInclude Include="ViewFileList.h">
-      <Filter>Header Files\MyClasses</Filter>
-    </ClInclude>
     <ClInclude Include="ViewFileTree.h">
       <Filter>Header Files\MyClasses</Filter>
     </ClInclude>
@@ -89,6 +86,9 @@
     </ClInclude>
     <ClInclude Include="Header.h">
       <Filter>Source Files\MyClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewFileList0.h">
+      <Filter>Header Files\MyClasses</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -122,9 +122,6 @@
     <ClCompile Include="ViewDirList.cpp">
       <Filter>Source Files\MyClasses</Filter>
     </ClCompile>
-    <ClCompile Include="ViewFileList.cpp">
-      <Filter>Source Files\MyClasses</Filter>
-    </ClCompile>
     <ClCompile Include="ViewFileTree.cpp">
       <Filter>Source Files\MyClasses</Filter>
     </ClCompile>
@@ -132,6 +129,15 @@
       <Filter>Source Files\MyClasses</Filter>
     </ClCompile>
     <ClCompile Include="Archive.cpp">
+      <Filter>Source Files\MyClasses</Filter>
+    </ClCompile>
+    <ClCompile Include="ViewFileList2.h">
+      <Filter>Header Files\MyClasses</Filter>
+    </ClCompile>
+    <ClCompile Include="ViewFileList0.cpp">
+      <Filter>Source Files\MyClasses</Filter>
+    </ClCompile>
+    <ClCompile Include="ViewFileList.cpp">
       <Filter>Source Files\MyClasses</Filter>
     </ClCompile>
   </ItemGroup>
@@ -165,12 +171,6 @@
     <Image Include="res\explorer_hc.bmp">
       <Filter>Resource Files\Bitmaps</Filter>
     </Image>
-    <Image Include="res\filetree.bmp">
-      <Filter>Resource Files\Bitmaps</Filter>
-    </Image>
-    <Image Include="res\filetree_hc.bmp">
-      <Filter>Resource Files\Bitmaps</Filter>
-    </Image>
     <Image Include="res\menuimages.bmp">
       <Filter>Resource Files\Bitmaps</Filter>
     </Image>
@@ -196,12 +196,6 @@
       <Filter>Resource Files\Bitmaps</Filter>
     </Image>
     <Image Include="res\userimages.bmp">
-      <Filter>Resource Files\Bitmaps</Filter>
-    </Image>
-    <Image Include="res\filelist.bmp">
-      <Filter>Resource Files\Bitmaps</Filter>
-    </Image>
-    <Image Include="res\filelist_hc.bmp">
       <Filter>Resource Files\Bitmaps</Filter>
     </Image>
     <Image Include="res\CleanDuplicates.ico">
@@ -233,6 +227,12 @@
     </Image>
     <Image Include="res\properties_wnd_hc.ico">
       <Filter>Resource Files\Icons</Filter>
+    </Image>
+    <Image Include="res\filelist.bmp">
+      <Filter>Resource Files\Bitmaps</Filter>
+    </Image>
+    <Image Include="res\filetree.bmp">
+      <Filter>Resource Files\Bitmaps</Filter>
     </Image>
   </ItemGroup>
 </Project>

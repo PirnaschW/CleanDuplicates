@@ -11,14 +11,17 @@ CChildFrame::~CChildFrame() {}
 
 BOOL CChildFrame::OnCreateClient(LPCREATESTRUCT /*lpcs*/, CCreateContext* pContext)
 {
+  constexpr int DirListHeight = 150;
+  constexpr int FileTreeWidth = 400;
+
   CRect cr;
   GetClientRect(&cr);
 
   m_wndSplit1.CreateStatic(this, 2, 1); // number of rows, columns
-  m_wndSplit1.CreateView(0, 0, RUNTIME_CLASS(ViewDirList), CSize(cr.Width(), 150), pContext);
+  m_wndSplit1.CreateView(0, 0, RUNTIME_CLASS(ViewDirList), CSize(cr.Width(), DirListHeight), pContext);
   m_wndSplit2.CreateStatic(&m_wndSplit1, 1, 2, WS_CHILD | WS_VISIBLE, m_wndSplit1.IdFromRowCol(1, 0));
-  m_wndSplit2.CreateView(0, 0, RUNTIME_CLASS(ViewFileTree), CSize(400, cr.Height() - 150), pContext);
-  m_wndSplit2.CreateView(0, 1, RUNTIME_CLASS(ViewFileList), CSize(600, cr.Height() - 150), pContext);
+  m_wndSplit2.CreateView(0, 0, RUNTIME_CLASS(ViewFileTree), CSize(FileTreeWidth, cr.Height() - DirListHeight), pContext);
+  m_wndSplit2.CreateView(0, 1, RUNTIME_CLASS(ViewFileList), CSize(cr.Width() - FileTreeWidth, cr.Height() - DirListHeight), pContext);
   return TRUE;
 }
 
