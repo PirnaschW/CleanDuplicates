@@ -30,14 +30,6 @@ namespace MyViews
     afx_msg void OnSize(UINT nType, int cx, int cy);
     afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
     afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
-    afx_msg void OnUpdateFileSort(CCmdUI* pCmdUI);
-    afx_msg void OnUpdateFileDupl(CCmdUI* pCmdUI);
-    afx_msg void OnUpdateFileMark(CCmdUI* pCmdUI);
-    afx_msg void OnUpdateFileDel(CCmdUI* pCmdUI);
-    afx_msg void OnFileSort();
-    afx_msg void OnFileDupl();
-    afx_msg void OnFileMark();
-    afx_msg void OnFileDel();
     DECLARE_MESSAGE_MAP()
   };
 

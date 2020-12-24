@@ -8,14 +8,6 @@ namespace MyViews
     ON_COMMAND(ID_FILE_PRINT, &CView::OnFilePrint)
     ON_COMMAND(ID_FILE_PRINT_DIRECT, &CView::OnFilePrint)
     ON_COMMAND(ID_FILE_PRINT_PREVIEW, &ViewFileList::OnFilePrintPreview)
-    ON_UPDATE_COMMAND_UI(ID_LIST_SORT, OnUpdateFileSort)
-    ON_UPDATE_COMMAND_UI(ID_LIST_DUPL, OnUpdateFileDupl)
-    ON_UPDATE_COMMAND_UI(ID_LIST_MARK, OnUpdateFileMark)
-    ON_UPDATE_COMMAND_UI(ID_LIST_DEL, OnUpdateFileDel)
-    ON_COMMAND(ID_LIST_SORT, OnFileSort)
-    ON_COMMAND(ID_LIST_DUPL, OnFileDupl)
-    ON_COMMAND(ID_LIST_MARK, OnFileMark)
-    ON_COMMAND(ID_LIST_DEL, OnFileDel)
     ON_WM_SIZE()
     ON_WM_CONTEXTMENU()
     ON_WM_RBUTTONUP()
@@ -37,7 +29,7 @@ namespace MyViews
 
     // create ToolBarCtrl, define style and buttons
     m_ToolBar.Create(WS_CHILD | WS_VISIBLE, CRect(0, 0, r.Width(), 24), this, IDR_FILELIST);
-    
+
     // need to replace the original ImageList with a custom built, as the standard is limited to 16 colors
     HBITMAP hBitmap = (HBITMAP) ::LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDR_FILELIST), IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION | LR_LOADMAP3DCOLORS);
     CBitmap bm;
@@ -48,14 +40,18 @@ namespace MyViews
 
     constexpr TBBUTTON b[]{
       { 0, ID_LIST_SORT, TBSTATE_ENABLED, BTNS_BUTTON, {0,0}, NULL, -1 },
-      { 1, ID_LIST_DUPL, TBSTATE_ENABLED, BTNS_BUTTON, {0,0}, NULL, -1 },
+      { 1, ID_LIST_DUPL, TBSTATE_ENABLED, BTNS_CHECK,  {0,0}, NULL, -1 },
       { 2, ID_LIST_MARK, TBSTATE_ENABLED, BTNS_BUTTON, {0,0}, NULL, -1 },
       { 3, ID_LIST_DEL,  TBSTATE_ENABLED, BTNS_BUTTON, {0,0}, NULL, -1 },
     };
     m_ToolBar.AddButtons(sizeof b / sizeof b[0], const_cast<TBBUTTON*>(b));
+    // tell the document about the toolbar, so it can directly control it
+    assert(GetDocument()->pToolBar == nullptr);
+    GetDocument()->pToolBar = &m_ToolBar;
+
 
     // create ListCtrl, define style and columns
-    m_List.Create(WS_CHILD | WS_VISIBLE | WS_BORDER | LVS_REPORT, CRect(0, 24, r.Width(), r.Height()-24), this, IDC_FILELIST);
+    m_List.Create(WS_CHILD | WS_VISIBLE | WS_BORDER | LVS_REPORT, CRect(0, 24, r.Width(), r.Height() - 24), this, IDC_FILELIST);
     m_List.SetExtendedStyle(m_List.GetExtendedStyle() | LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES | LVS_EX_HEADERDRAGDROP);
     m_List.InsertColumn(0, _T("Path"), LVCFMT_LEFT, 400);
     m_List.InsertColumn(1, _T("Filename"), LVCFMT_LEFT, 150);
@@ -63,7 +59,6 @@ namespace MyViews
     m_List.InsertColumn(3, _T("MD5 Hash"), LVCFMT_CENTER, 100);
     m_List.InsertColumn(4, _T("Duplicate"), LVCFMT_CENTER, 80);
     SetHeaderFont();
-
     // tell the document about the list control, so it can directly fill it
     assert(GetDocument()->pFileList == nullptr);
     GetDocument()->pFileList = &m_List;
@@ -119,16 +114,5 @@ namespace MyViews
     m_fntH.CreateFontIndirect(&lf);
     m_List.GetHeaderCtrl()->SetFont(&m_fntH);
   }
-
-
-  void ViewFileList::OnUpdateFileSort(CCmdUI* pCmdUI) { pCmdUI->Enable(TRUE); }
-  void ViewFileList::OnUpdateFileDupl(CCmdUI* pCmdUI) { pCmdUI->Enable(TRUE); }
-  void ViewFileList::OnUpdateFileMark(CCmdUI* pCmdUI) { pCmdUI->Enable(TRUE); }
-  void ViewFileList::OnUpdateFileDel(CCmdUI* pCmdUI) { pCmdUI->Enable(TRUE); }
-
-  void ViewFileList::OnFileSort() {}
-  void ViewFileList::OnFileDupl() {}
-  void ViewFileList::OnFileMark() {}
-  void ViewFileList::OnFileDel()  {}
 
 }

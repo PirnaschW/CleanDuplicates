@@ -4,6 +4,14 @@
 IMPLEMENT_DYNCREATE(CCleanDuplicatesDoc, CDocument)
 BEGIN_MESSAGE_MAP(CCleanDuplicatesDoc, CDocument)
   ON_NOTIFY(TVN_SELCHANGED, ID_VIEW_FILETREE, OnTreeSelChanged)
+  ON_UPDATE_COMMAND_UI(ID_LIST_SORT, OnUpdateFileSort)
+  ON_UPDATE_COMMAND_UI(ID_LIST_DUPL, OnUpdateFileDupl)
+  ON_UPDATE_COMMAND_UI(ID_LIST_MARK, OnUpdateFileMark)
+  ON_UPDATE_COMMAND_UI(ID_LIST_DEL, OnUpdateFileDel)
+  ON_COMMAND(ID_LIST_SORT, OnFileSort)
+  ON_COMMAND(ID_LIST_DUPL, OnFileDupl)
+  ON_COMMAND(ID_LIST_MARK, OnFileMark)
+  ON_COMMAND(ID_LIST_DEL, OnFileDel)
 END_MESSAGE_MAP()
 
 BOOL CCleanDuplicatesDoc::OnNewDocument()
@@ -122,17 +130,27 @@ void CCleanDuplicatesDoc::ListRebuild()
   for (const auto& it : fmap_)
   {
     size_t n = fmap_.count(it.first);
-    if (n == 1) continue; // don't show unique files
+    if (DuplicatesOnly && n == 1) continue; // don't show unique files if flag is set
     auto z = pFileList->InsertItem(pFileList->GetItemCount(), it.second.d.path().parent_path().wstring().c_str());
     pFileList->SetItemText(z, 1, it.second.d.path().filename().wstring().c_str());
     static wchar_t buffer[32];
     _ui64tow_s(it.first.size, buffer, 32, 10);
     pFileList->SetItemText(z, 2, buffer);
     pFileList->SetItemText(z, 3, it.first.hash.c_str());
-    pFileList->SetItemText(z, 4, n == 2 ? L"Duplicate" : L"Multiples");
+    pFileList->SetItemText(z, 4, GetText(n).c_str());
   }
 }
 
+const std::wstring CCleanDuplicatesDoc::GetText(size_t n)
+{
+  switch (n)
+  {
+    case 0:  throw;  // should not happen
+    case 1:  return L"Unique";
+    case 2:  return L"Duplicate";
+    default: return L"Multiples";
+  }
+}
 
 
 void CCleanDuplicatesDoc::OnTreeSelChanged(NMHDR* n, LRESULT* l)
@@ -149,3 +167,24 @@ void CCleanDuplicatesDoc::OnTreeSelChanged(NMHDR* n, LRESULT* l)
   }
 }
 
+void CCleanDuplicatesDoc::OnUpdateFileSort(CCmdUI* pCmdUI) { pCmdUI->Enable(TRUE); }
+void CCleanDuplicatesDoc::OnFileSort() {}
+
+void CCleanDuplicatesDoc::OnUpdateFileDupl(CCmdUI* pCmdUI) { pCmdUI->SetCheck(DuplicatesOnly ? 1 : 0); pCmdUI->Enable(TRUE); }
+void CCleanDuplicatesDoc::OnFileDupl()
+{
+  DuplicatesOnly ^= true;
+  pToolBar->CheckButton(ID_LIST_DUPL, DuplicatesOnly ? TRUE : FALSE);
+  pToolBar->EnableButton(ID_LIST_DEL, FALSE);
+
+  ListRebuild();
+}
+
+void CCleanDuplicatesDoc::OnUpdateFileMark(CCmdUI* pCmdUI) { pCmdUI->Enable(TRUE); }
+void CCleanDuplicatesDoc::OnFileMark()
+{
+  pToolBar->EnableButton(ID_LIST_DEL, TRUE);
+}
+
+void CCleanDuplicatesDoc::OnUpdateFileDel(CCmdUI* pCmdUI) { pCmdUI->Enable(FALSE); }
+void CCleanDuplicatesDoc::OnFileDel() {}
