@@ -28,23 +28,47 @@ namespace MyViews
     GetClientRect(r);
 
     // create ToolBarCtrl, define style and buttons
-    m_ToolBar.Create(WS_CHILD | WS_VISIBLE, CRect(0, 0, r.Width(), 24), this, IDR_FILELIST);
+    m_ToolBar.Create(WS_CHILD | WS_VISIBLE | TBSTYLE_EX_DRAWDDARROWS, CRect(0, 0, r.Width(), 24), this, IDR_FILELIST);
 
     // need to replace the original ImageList with a custom built, as the standard is limited to 16 colors
     HBITMAP hBitmap = (HBITMAP) ::LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDR_FILELIST), IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION | LR_LOADMAP3DCOLORS);
     CBitmap bm;
     bm.Attach(hBitmap);
-    m_ImageList.Create(16, 15, ILC_COLOR8, 4, 4);
+    m_ImageList.Create(16, 15, ILC_COLOR8, 5, 5);
     m_ImageList.Add(&bm, (CBitmap*) NULL);
     m_ToolBar.SetImageList(&m_ImageList);
 
     constexpr TBBUTTON b[]{
-      { 0, ID_LIST_SORT, TBSTATE_ENABLED, BTNS_BUTTON, {0,0}, NULL, -1 },
-      { 1, ID_LIST_DUPL, TBSTATE_ENABLED, BTNS_CHECK,  {0,0}, NULL, -1 },
-      { 2, ID_LIST_MARK, TBSTATE_ENABLED, BTNS_BUTTON, {0,0}, NULL, -1 },
-      { 3, ID_LIST_DEL,  TBSTATE_ENABLED, BTNS_BUTTON, {0,0}, NULL, -1 },
+      { 0, ID_LIST_SORT_PATH, TBSTATE_ENABLED, BTNS_CHECK | BTNS_GROUP, {0,0}, NULL, -1 },
+      { 1, ID_LIST_SORT_SIZE, TBSTATE_ENABLED, BTNS_CHECK | BTNS_GROUP, {0,0}, NULL, -1 },
+      { 2, ID_LIST_DUPL,      TBSTATE_ENABLED, BTNS_CHECK,              {0,0}, NULL, -1 },
+      { 3, ID_LIST_MARK,      TBSTATE_ENABLED, BTNS_BUTTON,             {0,0}, NULL, -1 },
+      { 4, ID_LIST_DEL,       TBSTATE_ENABLED, BTNS_BUTTON,             {0,0}, NULL, -1 },
     };
     m_ToolBar.AddButtons(sizeof b / sizeof b[0], const_cast<TBBUTTON*>(b));
+
+    // replace first button with sort menu
+    CMenu menuSort;
+    menuSort.LoadMenu(IDR_POPUP_SORT);
+
+    //CMFCToolBar tb;
+    //CMFCToolBarButton tbb;
+    //tb.ReplaceButton(IDR_OUTPUT_POPUP, tbb, TRUE);
+      //CClassViewMenuButton(menuSort.GetSubMenu(0)->GetSafeHmenu()));
+    //m_ToolBar.ReplaceButton(ID_SORT_MENU, CClassViewMenuButton(menuSort.GetSubMenu(0)->GetSafeHmenu()));
+
+    //CClassViewMenuButton* pButton = DYNAMIC_DOWNCAST(CClassViewMenuButton, m_ToolBar.GetButton(0));
+
+    //if (pButton != nullptr)
+    //{
+    //  pButton->m_bText = FALSE;
+    //  pButton->m_bImage = TRUE;
+    //  pButton->SetImage(GetCmdMgr()->GetCmdImage(m_nCurrSort));
+    //  pButton->SetMessageWnd(this);
+    //}
+    
+
+
     // tell the document about the toolbar, so it can directly control it
     assert(GetDocument()->pToolBar == nullptr);
     GetDocument()->pToolBar = &m_ToolBar;

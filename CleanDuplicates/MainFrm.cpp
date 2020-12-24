@@ -199,8 +199,11 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
   lstBasicCommands.AddTail(ID_DIR_ADD);
   lstBasicCommands.AddTail(ID_DIR_DEL);
   lstBasicCommands.AddTail(ID_DIR_DELALL);
-  lstBasicCommands.AddTail(ID_LIST_SORT);
+  lstBasicCommands.AddTail(ID_LIST_SORT_PATH);
+  lstBasicCommands.AddTail(ID_LIST_SORT_SIZE);
   lstBasicCommands.AddTail(ID_LIST_DUPL);
+  lstBasicCommands.AddTail(ID_LIST_MARK);
+  lstBasicCommands.AddTail(ID_LIST_DEL);
 
   CMFCToolBar::SetBasicCommands(lstBasicCommands);
 

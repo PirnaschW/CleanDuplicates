@@ -20,6 +20,7 @@ public:
 private:
   void CollectFiles(const std::filesystem::directory_entry& s, HTREEITEM hScope);
   static const std::wstring GetText(size_t n);
+  static int __stdcall CompareFunc(LPARAM lparam1, LPARAM lparam2, LPARAM lparamSort);
 
 public:
   std::vector<std::wstring> dirlist_{};

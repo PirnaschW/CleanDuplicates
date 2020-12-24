@@ -4,11 +4,13 @@
 IMPLEMENT_DYNCREATE(CCleanDuplicatesDoc, CDocument)
 BEGIN_MESSAGE_MAP(CCleanDuplicatesDoc, CDocument)
   ON_NOTIFY(TVN_SELCHANGED, ID_VIEW_FILETREE, OnTreeSelChanged)
-  ON_UPDATE_COMMAND_UI(ID_LIST_SORT, OnUpdateFileSort)
+  ON_UPDATE_COMMAND_UI(ID_LIST_SORT_PATH, OnUpdateFileSort)
+  ON_UPDATE_COMMAND_UI(ID_LIST_SORT_SIZE, OnUpdateFileSort)
   ON_UPDATE_COMMAND_UI(ID_LIST_DUPL, OnUpdateFileDupl)
   ON_UPDATE_COMMAND_UI(ID_LIST_MARK, OnUpdateFileMark)
   ON_UPDATE_COMMAND_UI(ID_LIST_DEL, OnUpdateFileDel)
-  ON_COMMAND(ID_LIST_SORT, OnFileSort)
+  ON_COMMAND(ID_LIST_SORT_PATH, OnFileSort)
+  ON_COMMAND(ID_LIST_SORT_SIZE, OnFileSort)
   ON_COMMAND(ID_LIST_DUPL, OnFileDupl)
   ON_COMMAND(ID_LIST_MARK, OnFileMark)
   ON_COMMAND(ID_LIST_DEL, OnFileDel)
@@ -24,9 +26,6 @@ BOOL CCleanDuplicatesDoc::OnNewDocument()
   return TRUE;
 }
 
-
-
-
 void CCleanDuplicatesDoc::Serialize(CArchive& ar)
 {
   if (ar.IsStoring())
@@ -38,7 +37,6 @@ void CCleanDuplicatesDoc::Serialize(CArchive& ar)
     ar >> dirlist_;
   }
 }
-
 
 void CCleanDuplicatesDoc::UpdateAllViewsNow(CView* pSender, LPARAM lHint, CObject* pHint)
 {
@@ -148,7 +146,7 @@ const std::wstring CCleanDuplicatesDoc::GetText(size_t n)
     case 0:  throw;  // should not happen
     case 1:  return L"Unique";
     case 2:  return L"Duplicate";
-    default: return L"Multiples";
+    default: return L"Multiple";
   }
 }
 
@@ -167,8 +165,23 @@ void CCleanDuplicatesDoc::OnTreeSelChanged(NMHDR* n, LRESULT* l)
   }
 }
 
+int __stdcall CCleanDuplicatesDoc::CompareFunc(LPARAM lparam1, LPARAM lparam2, LPARAM lparamSort)
+{
+  CCleanDuplicatesDoc* This = reinterpret_cast<CCleanDuplicatesDoc*>(lparamSort);
+  unsigned long long size1 = _wcstoui64(This->pFileList->GetItemText(lparam1, 2).GetString(), nullptr, 10);
+  unsigned long long size2 = _wcstoui64(This->pFileList->GetItemText(lparam2, 2).GetString(), nullptr, 10);
+  return (size1 > size2) ? -1 : ((size1 < size2) ? 1 : 0);;
+};
+
 void CCleanDuplicatesDoc::OnUpdateFileSort(CCmdUI* pCmdUI) { pCmdUI->Enable(TRUE); }
-void CCleanDuplicatesDoc::OnFileSort() {}
+void CCleanDuplicatesDoc::OnFileSort() {
+  bool p = pToolBar->IsButtonChecked(ID_LIST_SORT_PATH);
+  bool s = pToolBar->IsButtonChecked(ID_LIST_SORT_SIZE);
+  assert(p ^ s);
+
+  pFileList->SortItemsEx(CompareFunc, reinterpret_cast<DWORD_PTR>(this));
+}
+
 
 void CCleanDuplicatesDoc::OnUpdateFileDupl(CCmdUI* pCmdUI) { pCmdUI->SetCheck(DuplicatesOnly ? 1 : 0); pCmdUI->Enable(TRUE); }
 void CCleanDuplicatesDoc::OnFileDupl()
