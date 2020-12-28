@@ -28,14 +28,17 @@ public:
   CListCtrl* pFileList{ nullptr };
   CToolBarCtrl* pToolBar{ nullptr };
   FileMap::FMap fmap_{};
-  bool DuplicatesOnly{ false };
+  bool duplicatesOnly{ false };
+  bool checkDuplicates{ false };
+  size_t sortBy{ 0 };
 
 protected:
   // Generated message map functions
   // add functions that modify the document content in the CDoc
   // add functions that modify the view's display in the CView
   afx_msg void OnTreeSelChanged(NMHDR*, LRESULT*);
-  afx_msg void OnUpdateFileSort(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateFileSortPath(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateFileSortSize(CCmdUI* pCmdUI);
   afx_msg void OnUpdateFileDupl(CCmdUI* pCmdUI);
   afx_msg void OnUpdateFileMark(CCmdUI* pCmdUI);
   afx_msg void OnUpdateFileDel(CCmdUI* pCmdUI);

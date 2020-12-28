@@ -324,6 +324,30 @@ namespace MD5
       return digestChars;
     }
 
+    // handle wide-char filenames
+    char* digestFile(const wchar_t* _wfilename)
+    {
+      Init();
+
+      FILE* file;
+
+      size_t len;
+      unsigned char buffer[1024];
+
+      if ((file = _wfopen(_wfilename, L"rb")) == NULL)
+        printf("%Ls can't be opened\n", _wfilename);
+      else
+      {
+        while (len = fread(buffer, 1, 1024, file))
+          Update(buffer, len);
+        Final();
+
+        fclose(file);
+      }
+
+      return digestChars;
+    }
+
     /// Digests a byte-array already in memory
     char* digestMemory(BYTE* memchunk, int len)
     {

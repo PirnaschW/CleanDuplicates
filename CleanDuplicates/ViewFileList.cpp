@@ -28,7 +28,7 @@ namespace MyViews
     GetClientRect(r);
 
     // create ToolBarCtrl, define style and buttons
-    m_ToolBar.Create(WS_CHILD | WS_VISIBLE | TBSTYLE_EX_DRAWDDARROWS, CRect(0, 0, r.Width(), 24), this, IDR_FILELIST);
+    m_ToolBar.Create(WS_CHILD | WS_VISIBLE, CRect(0, 0, r.Width(), 24), this, IDR_FILELIST);
 
     // need to replace the original ImageList with a custom built, as the standard is limited to 16 colors
     HBITMAP hBitmap = (HBITMAP) ::LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDR_FILELIST), IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION | LR_LOADMAP3DCOLORS);
@@ -42,32 +42,10 @@ namespace MyViews
       { 0, ID_LIST_SORT_PATH, TBSTATE_ENABLED, BTNS_CHECK | BTNS_GROUP, {0,0}, NULL, -1 },
       { 1, ID_LIST_SORT_SIZE, TBSTATE_ENABLED, BTNS_CHECK | BTNS_GROUP, {0,0}, NULL, -1 },
       { 2, ID_LIST_DUPL,      TBSTATE_ENABLED, BTNS_CHECK,              {0,0}, NULL, -1 },
-      { 3, ID_LIST_MARK,      TBSTATE_ENABLED, BTNS_BUTTON,             {0,0}, NULL, -1 },
+      { 3, ID_LIST_MARK,      TBSTATE_ENABLED, BTNS_CHECK,              {0,0}, NULL, -1 },
       { 4, ID_LIST_DEL,       TBSTATE_ENABLED, BTNS_BUTTON,             {0,0}, NULL, -1 },
     };
     m_ToolBar.AddButtons(sizeof b / sizeof b[0], const_cast<TBBUTTON*>(b));
-
-    // replace first button with sort menu
-    CMenu menuSort;
-    menuSort.LoadMenu(IDR_POPUP_SORT);
-
-    //CMFCToolBar tb;
-    //CMFCToolBarButton tbb;
-    //tb.ReplaceButton(IDR_OUTPUT_POPUP, tbb, TRUE);
-      //CClassViewMenuButton(menuSort.GetSubMenu(0)->GetSafeHmenu()));
-    //m_ToolBar.ReplaceButton(ID_SORT_MENU, CClassViewMenuButton(menuSort.GetSubMenu(0)->GetSafeHmenu()));
-
-    //CClassViewMenuButton* pButton = DYNAMIC_DOWNCAST(CClassViewMenuButton, m_ToolBar.GetButton(0));
-
-    //if (pButton != nullptr)
-    //{
-    //  pButton->m_bText = FALSE;
-    //  pButton->m_bImage = TRUE;
-    //  pButton->SetImage(GetCmdMgr()->GetCmdImage(m_nCurrSort));
-    //  pButton->SetMessageWnd(this);
-    //}
-    
-
 
     // tell the document about the toolbar, so it can directly control it
     assert(GetDocument()->pToolBar == nullptr);
@@ -76,7 +54,7 @@ namespace MyViews
 
     // create ListCtrl, define style and columns
     m_List.Create(WS_CHILD | WS_VISIBLE | WS_BORDER | LVS_REPORT, CRect(0, 24, r.Width(), r.Height() - 24), this, IDC_FILELIST);
-    m_List.SetExtendedStyle(m_List.GetExtendedStyle() | LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES | LVS_EX_HEADERDRAGDROP);
+    m_List.SetExtendedStyle(m_List.GetExtendedStyle() | LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES | LVS_EX_HEADERDRAGDROP | LVS_EX_CHECKBOXES);
     m_List.InsertColumn(0, _T("Path"), LVCFMT_LEFT, 400);
     m_List.InsertColumn(1, _T("Filename"), LVCFMT_LEFT, 150);
     m_List.InsertColumn(2, _T("Size"), LVCFMT_RIGHT, 80);

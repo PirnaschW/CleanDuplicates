@@ -9,11 +9,11 @@ namespace FileMap
     {
       MD5::MD5 md5;
       std::wstringstream cls{};
-      cls << md5.digestFile(d.path().string().c_str());
+      cls << md5.digestFile(d.path().wstring().c_str());
       return cls.str();
     }
 
-    void UpdateKey(FMap& fmap, FileMap::FileKey& fk)
+    void UpdateKey(FMap& fmap, const FileMap::FileKey& fk)
     {
       auto nh = fmap.extract(fk);                                            // extract the (one and only) already existing file with that size
       nh.key() = { nh.mapped().d.file_size(),GetMD5Hash(nh.mapped().d) };    // update the key with the MD5hash
@@ -28,19 +28,22 @@ namespace FileMap
     std::error_code ec{};
 
     // try with FileKey containing only the size - only same-size files need to compare their MD5 Hashes
-    FileMap::FileKey fk0{ d.file_size(), L"" };  
-    FileMap::FileData fd{ d };
-    switch (fmap.count(fk0))  // check how many files with this size are already there
+    const FileMap::FileKey fk1{ d.file_size(), L"" };  
+    const size_t rank = fmap.count(fk1) + 1;
+    FileMap::FileData fd{ rank, d };
+    switch (rank)  // check how many files with this size are already there
     {
-      case 0: // new entry, firstfile found with this size
-        return fmap.insert({ fk0,fd });
+      case 1: // new entry, firstfile found with this size
+        return fmap.insert({ fk1,fd });
 
-      case 1: // duplicate entry; need to go back and calculate MD5 hash for BOTH old and new file
-        UpdateKey(fmap, fk0);   // update the key with the MD5hash for the (one and only) already existing file with that size
+      case 2: // duplicate entry; need to go back and calculate MD5 hash for BOTH old and new file
+        UpdateKey(fmap, fk1);   // update the key with the MD5hash for the (one and only!) already existing file with that size
         [[fallthrough]];
 
-      default: // calculate and insert the new file's MD5 hash
-        return fmap.insert({ {d.file_size(),GetMD5Hash(d)},fd });   // add the new file (which is a potential duplicate)
+      default: // second, third or more - calculate and insert the new file's MD5 hash
+        FileMap::FileKey fk2{ d.file_size(), GetMD5Hash(d) };
+        fd.rank = fmap.count(fk2) + 1;    // recalc the rank, now with the MD5 Hash
+        return fmap.insert({ fk2,fd });   // add the new file (which is a potential duplicate)
     }
   }
 

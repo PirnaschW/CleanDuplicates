@@ -12,6 +12,7 @@ namespace FileMap
 
   struct FileData
   {
+    size_t rank;
     std::filesystem::directory_entry d;
   };
 
