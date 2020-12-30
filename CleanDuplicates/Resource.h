@@ -41,7 +41,8 @@
 #define ID_LIST_SORT_SIZE              612  // Command
 #define ID_LIST_DUPL                   613  // Command
 #define ID_LIST_MARK                   614  // Command
-#define ID_LIST_DEL                    615  // Command
+#define ID_LIST_MOVE                   615  // Command
+#define ID_LIST_DEL                    616  // Command
 
 #define ID_PROPERTIES 135
 #define ID_OPEN 136

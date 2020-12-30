@@ -40,16 +40,16 @@ namespace MyViews
 
   void ViewFileTree::OnFilePrintPreview() { AFXPrintPreview(this); }
   BOOL ViewFileTree::OnPreparePrinting(CPrintInfo* pInfo) { return DoPreparePrinting(pInfo); }
-  void ViewFileTree::OnBeginPrinting(CDC* pDC, CPrintInfo* pInfo) {}
-  void ViewFileTree::OnEndPrinting(CDC* pDC, CPrintInfo* pInfo) {}
+  void ViewFileTree::OnBeginPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/) {}
+  void ViewFileTree::OnEndPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/) {}
   
-  void ViewFileTree::OnRButtonUp(UINT nFlags, CPoint point)
+  void ViewFileTree::OnRButtonUp(UINT /*nFlags*/, CPoint point)
   {
     ClientToScreen(&point);
     OnContextMenu(this, point);
   }
 
-  void ViewFileTree::OnContextMenu(CWnd* pWnd, CPoint point)
+  void ViewFileTree::OnContextMenu(CWnd* /*pWnd*/, CPoint point)
   {
     theApp.GetContextMenuManager()->ShowPopupMenu(IDR_POPUP_EDIT, point.x, point.y, this, TRUE);
   }

@@ -1,17 +1,14 @@
 // pch.h: This is a precompiled header file.
-// Files listed below are compiled only once, improving build performance for future builds.
-// This also affects IntelliSense performance, including code completion and many code browsing features.
-// However, files listed here are ALL re-compiled if any one of them is updated between builds.
-// Do not add files here that you will be updating frequently as this negates the performance advantage.
 
-// add headers that you want to pre-compile here
+// windows & MFC source code is full of warnings, so reduce warning level for them
+#pragma warning( push, 2 )
+
 
 #ifndef VC_EXTRALEAN
 #define VC_EXTRALEAN // Exclude rarely-used stuff from Windows headers
 #endif
 
 #include "targetver.h"
-
 
 #define _CRT_SECURE_NO_WARNINGS
 
@@ -50,12 +47,15 @@
 #define new DEBUG_NEW
 #endif
 
+#pragma warning( pop )  // back to full warning level
+
 #include <filesystem>
 #include <functional>
 #include <sstream>
 #include <string>
 #include <vector>
 #include <unordered_map>
+#include <assert.h>
 #include <propkey.h>
 
 #include "Archive.h"

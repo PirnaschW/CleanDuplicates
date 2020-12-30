@@ -41,10 +41,12 @@ protected:
   afx_msg void OnUpdateFileSortSize(CCmdUI* pCmdUI);
   afx_msg void OnUpdateFileDupl(CCmdUI* pCmdUI);
   afx_msg void OnUpdateFileMark(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateFileMove(CCmdUI* pCmdUI);
   afx_msg void OnUpdateFileDel(CCmdUI* pCmdUI);
   afx_msg void OnFileSort();
   afx_msg void OnFileDupl();
   afx_msg void OnFileMark();
+  afx_msg void OnFileMove();
   afx_msg void OnFileDel();
   DECLARE_MESSAGE_MAP()
 

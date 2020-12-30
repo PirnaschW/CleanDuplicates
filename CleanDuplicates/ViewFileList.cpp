@@ -43,7 +43,8 @@ namespace MyViews
       { 1, ID_LIST_SORT_SIZE, TBSTATE_ENABLED, BTNS_CHECK | BTNS_GROUP, {0,0}, NULL, -1 },
       { 2, ID_LIST_DUPL,      TBSTATE_ENABLED, BTNS_CHECK,              {0,0}, NULL, -1 },
       { 3, ID_LIST_MARK,      TBSTATE_ENABLED, BTNS_CHECK,              {0,0}, NULL, -1 },
-      { 4, ID_LIST_DEL,       TBSTATE_ENABLED, BTNS_BUTTON,             {0,0}, NULL, -1 },
+      { 4, ID_LIST_MOVE,      TBSTATE_ENABLED, BTNS_BUTTON,             {0,0}, NULL, -1 },
+      { 5, ID_LIST_DEL,       TBSTATE_ENABLED, BTNS_BUTTON,             {0,0}, NULL, -1 },
     };
     m_ToolBar.AddButtons(sizeof b / sizeof b[0], const_cast<TBBUTTON*>(b));
 
@@ -69,16 +70,14 @@ namespace MyViews
     GetDocument()->ListRebuild();     // add data to List Ctrl
   }
 
-  void ViewFileList::OnDraw(CDC* pDC)
-  {
-  }
+  void ViewFileList::OnDraw(CDC* /*pDC*/) {}
 
   void ViewFileList::OnFilePrintPreview() { AFXPrintPreview(this); }
   BOOL ViewFileList::OnPreparePrinting(CPrintInfo* pInfo) { return DoPreparePrinting(pInfo); }
-  void ViewFileList::OnBeginPrinting(CDC* pDC, CPrintInfo* pInfo) {}
-  void ViewFileList::OnEndPrinting(CDC* pDC, CPrintInfo* pInfo) {}
+  void ViewFileList::OnBeginPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/) {}
+  void ViewFileList::OnEndPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/) {}
 
-  void ViewFileList::OnSize(UINT nType, int cx, int cy)
+  void ViewFileList::OnSize(UINT nType, int /*cx*/, int /*cy*/)
   {
     if (nType != SIZE_RESTORED || m_ToolBar.m_hWnd == nullptr || m_List.m_hWnd == nullptr) return;
     CRect r;
@@ -88,13 +87,13 @@ namespace MyViews
     m_List.SetWindowPos(nullptr, 0, HIWORD(dw) + 2, r.Width(), r.Height() - HIWORD(dw) - 2, SWP_NOACTIVATE | SWP_NOZORDER);
   }
 
-  void ViewFileList::OnRButtonUp(UINT nFlags, CPoint point)
+  void ViewFileList::OnRButtonUp(UINT /*nFlags*/, CPoint point)
   {
     ClientToScreen(&point);
     OnContextMenu(this, point);
   }
 
-  void ViewFileList::OnContextMenu(CWnd* pWnd, CPoint point)
+  void ViewFileList::OnContextMenu(CWnd* /*pWnd*/, CPoint point)
   {
     theApp.GetContextMenuManager()->ShowPopupMenu(IDR_FILELIST, point.x, point.y, this, TRUE);
   }

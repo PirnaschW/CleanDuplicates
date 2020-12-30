@@ -1,5 +1,7 @@
 #include "pch.h"
 
+using namespace MyViews;  // MFC macros cannot handle namespace qualifications, so we need to import
+
 BEGIN_MESSAGE_MAP(CCleanDuplicatesApp, CWinAppEx)
   ON_COMMAND(ID_APP_ABOUT, &CCleanDuplicatesApp::OnAppAbout)
   // Standard file based document commands
@@ -76,7 +78,7 @@ BOOL CCleanDuplicatesApp::InitInstance()
     RUNTIME_CLASS(CCleanDuplicatesDoc),
     RUNTIME_CLASS(CChildFrame), // custom MDI child frame
    // RUNTIME_CLASS(CCleanDuplicatesView));
-    RUNTIME_CLASS(MyViews::ViewDirList));
+    RUNTIME_CLASS(ViewDirList));
 //  RUNTIME_CLASS(ViewFileTree);
 //  RUNTIME_CLASS(ViewFileList);
   if (!pDocTemplate)

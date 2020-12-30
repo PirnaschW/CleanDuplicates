@@ -8,11 +8,13 @@ BEGIN_MESSAGE_MAP(CCleanDuplicatesDoc, CDocument)
   ON_UPDATE_COMMAND_UI(ID_LIST_SORT_SIZE, OnUpdateFileSortSize)
   ON_UPDATE_COMMAND_UI(ID_LIST_DUPL, OnUpdateFileDupl)
   ON_UPDATE_COMMAND_UI(ID_LIST_MARK, OnUpdateFileMark)
+  ON_UPDATE_COMMAND_UI(ID_LIST_MOVE, OnUpdateFileMove)
   ON_UPDATE_COMMAND_UI(ID_LIST_DEL, OnUpdateFileDel)
   ON_COMMAND(ID_LIST_SORT_PATH, OnFileSort)
   ON_COMMAND(ID_LIST_SORT_SIZE, OnFileSort)
   ON_COMMAND(ID_LIST_DUPL, OnFileDupl)
   ON_COMMAND(ID_LIST_MARK, OnFileMark)
+  ON_COMMAND(ID_LIST_MOVE, OnFileMove)
   ON_COMMAND(ID_LIST_DEL, OnFileDel)
 END_MESSAGE_MAP()
 
@@ -152,7 +154,7 @@ const std::wstring CCleanDuplicatesDoc::GetText(size_t n)
 }
 
 
-void CCleanDuplicatesDoc::OnTreeSelChanged(NMHDR* n, LRESULT* l)
+void CCleanDuplicatesDoc::OnTreeSelChanged(NMHDR* n, LRESULT* /*l*/)
 {
   LPNMTREEVIEW pnmtv = (LPNMTREEVIEW) n;
   switch (pnmtv->action)
@@ -169,8 +171,8 @@ void CCleanDuplicatesDoc::OnTreeSelChanged(NMHDR* n, LRESULT* l)
 int __stdcall CCleanDuplicatesDoc::CompareFunc(LPARAM lparam1, LPARAM lparam2, LPARAM lparamSort)
 {
   CCleanDuplicatesDoc* This = reinterpret_cast<CCleanDuplicatesDoc*>(lparamSort);
-  std::wstring s1 = This->pFileList->GetItemText(lparam1, This->sortBy).GetString();
-  std::wstring s2 = This->pFileList->GetItemText(lparam2, This->sortBy).GetString();
+  std::wstring s1 = This->pFileList->GetItemText(static_cast<int>(lparam1), static_cast<int>(This->sortBy)).GetString();
+  std::wstring s2 = This->pFileList->GetItemText(static_cast<int>(lparam2), static_cast<int>(This->sortBy)).GetString();
   switch (This->sortBy)
   {
     case 0: // sort by path
@@ -188,9 +190,8 @@ int __stdcall CCleanDuplicatesDoc::CompareFunc(LPARAM lparam1, LPARAM lparam2, L
 void CCleanDuplicatesDoc::OnUpdateFileSortPath(CCmdUI* pCmdUI) { pCmdUI->SetCheck(sortBy == 0 ? 1 : 0); pCmdUI->Enable(TRUE); }
 void CCleanDuplicatesDoc::OnUpdateFileSortSize(CCmdUI* pCmdUI) { pCmdUI->SetCheck(sortBy == 2 ? 1 : 0); pCmdUI->Enable(TRUE); }
 void CCleanDuplicatesDoc::OnFileSort() {
-  bool p = pToolBar->IsButtonChecked(ID_LIST_SORT_PATH);
-  bool s = pToolBar->IsButtonChecked(ID_LIST_SORT_SIZE);
-  assert(p ^ s);
+  bool p = static_cast<bool>(pToolBar->IsButtonChecked(ID_LIST_SORT_PATH));
+  assert(p ^ static_cast<bool>(pToolBar->IsButtonChecked(ID_LIST_SORT_SIZE)));
 
   sortBy = p ? 0 : 2;
 
@@ -203,8 +204,6 @@ void CCleanDuplicatesDoc::OnFileDupl()
 {
   duplicatesOnly ^= true;
   pToolBar->CheckButton(ID_LIST_DUPL, duplicatesOnly ? TRUE : FALSE);
-  pToolBar->EnableButton(ID_LIST_DEL, FALSE);
-
   ListRebuild();
 }
 
@@ -214,8 +213,25 @@ void CCleanDuplicatesDoc::OnFileMark()
   // check to-be-deleted lines
   checkDuplicates ^= true;
   ListRebuild();
-  if (checkDuplicates) pToolBar->EnableButton(ID_LIST_DEL, TRUE);
 }
 
-void CCleanDuplicatesDoc::OnUpdateFileDel(CCmdUI* pCmdUI) { pCmdUI->Enable(FALSE); }
-void CCleanDuplicatesDoc::OnFileDel() {}
+void CCleanDuplicatesDoc::OnUpdateFileMove(CCmdUI* pCmdUI) { pCmdUI->Enable(TRUE); }
+void CCleanDuplicatesDoc::OnFileMove()
+{
+
+}
+
+void CCleanDuplicatesDoc::OnUpdateFileDel(CCmdUI* pCmdUI) { pCmdUI->Enable(TRUE); }
+void CCleanDuplicatesDoc::OnFileDel()
+{
+  
+  for (int i=0; i< pFileList->GetItemCount(); ++i)
+  {
+    if (pFileList->GetCheck(i))
+    {
+      std::filesystem::path p = pFileList->GetItemText(i, 0).GetString();
+      p /= pFileList->GetItemText(i, 1).GetString();
+      std::filesystem::remove(p);
+    }
+  }
+}

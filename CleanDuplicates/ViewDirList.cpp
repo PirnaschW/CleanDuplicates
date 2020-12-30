@@ -38,21 +38,21 @@ namespace MyViews
 
     // if this is a document loaded from file, we need to update the control with the data - Serialization doesn't do that
     for (size_t i = 0; i < GetDocument()->dirlist_.size(); ++i)
-      GetListCtrl().InsertItem(i, GetDocument()->dirlist_[i].c_str());         // add to List Ctrl
+      GetListCtrl().InsertItem(static_cast<int>(i), GetDocument()->dirlist_[i].c_str());         // add to List Ctrl
   }
 
   void ViewDirList::OnFilePrintPreview() { AFXPrintPreview(this); }
   BOOL ViewDirList::OnPreparePrinting(CPrintInfo* pInfo) { return DoPreparePrinting(pInfo); }
-  void ViewDirList::OnBeginPrinting(CDC* pDC, CPrintInfo* pInfo) {}
-  void ViewDirList::OnEndPrinting(CDC* pDC, CPrintInfo* pInfo) {}
+  void ViewDirList::OnBeginPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/) {}
+  void ViewDirList::OnEndPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/) {}
   
-  void ViewDirList::OnRButtonUp(UINT nFlags, CPoint point)
+  void ViewDirList::OnRButtonUp(UINT /*nFlags*/, CPoint point)
   {
     ClientToScreen(&point);
     OnContextMenu(this, point);
   }
 
-  void ViewDirList::OnContextMenu(CWnd* pWnd, CPoint point)
+  void ViewDirList::OnContextMenu(CWnd* /*pWnd*/, CPoint point)
   {
     theApp.GetContextMenuManager()->ShowPopupMenu(IDR_DIRLIST, point.x, point.y, this, TRUE);
   }
