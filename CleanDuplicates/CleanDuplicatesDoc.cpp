@@ -153,6 +153,16 @@ const std::wstring CCleanDuplicatesDoc::GetText(size_t n)
   }
 }
 
+FileMap::FMap::iterator CCleanDuplicatesDoc::GetPrimary(const FileMap::FileKey& fk)
+{
+  auto r = fmap_.equal_range(fk);
+  for (auto& it = r.first; it != r.second; ++it)
+  {
+    if (it->second.rank == 1) return it;
+  }
+  return fmap_.end();
+}
+
 
 void CCleanDuplicatesDoc::OnTreeSelChanged(NMHDR* n, LRESULT* /*l*/)
 {
@@ -218,13 +228,27 @@ void CCleanDuplicatesDoc::OnFileMark()
 void CCleanDuplicatesDoc::OnUpdateFileMove(CCmdUI* pCmdUI) { pCmdUI->Enable(TRUE); }
 void CCleanDuplicatesDoc::OnFileMove()
 {
+  for (int i = 0; i < pFileList->GetItemCount(); ++i)
+  {
+    if (pFileList->GetCheck(i))
+    {
+      std::wstring s = pFileList->GetItemText(i,2).GetString();
+      unsigned long long size = _wcstoui64(s.c_str(), nullptr, 10);
+      const FileMap::FileKey fk{ size,pFileList->GetItemText(i, 3).GetString() };
+      const auto& primary = GetPrimary(fk);
+      std::filesystem::path p0 = primary->second.d;
+
+      std::filesystem::path p1 = primary->second.d;
+      p1 = p1.parent_path() / pFileList->GetItemText(i, 1).GetString();
+      std::filesystem::rename(p0,p1);
+    }
+  }
 
 }
 
 void CCleanDuplicatesDoc::OnUpdateFileDel(CCmdUI* pCmdUI) { pCmdUI->Enable(TRUE); }
 void CCleanDuplicatesDoc::OnFileDel()
 {
-  
   for (int i=0; i< pFileList->GetItemCount(); ++i)
   {
     if (pFileList->GetCheck(i))

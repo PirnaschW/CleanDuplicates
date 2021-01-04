@@ -21,6 +21,7 @@ private:
   void CollectFiles(const std::filesystem::directory_entry& s, HTREEITEM hScope);
   static const std::wstring GetText(size_t n);
   static int __stdcall CompareFunc(LPARAM lparam1, LPARAM lparam2, LPARAM lparamSort);
+  FileMap::FMap::iterator GetPrimary(const FileMap::FileKey& fk);
 
 public:
   std::vector<std::wstring> dirlist_{};
@@ -43,11 +44,11 @@ protected:
   afx_msg void OnUpdateFileMark(CCmdUI* pCmdUI);
   afx_msg void OnUpdateFileMove(CCmdUI* pCmdUI);
   afx_msg void OnUpdateFileDel(CCmdUI* pCmdUI);
-  afx_msg void OnFileSort();
-  afx_msg void OnFileDupl();
-  afx_msg void OnFileMark();
-  afx_msg void OnFileMove();
-  afx_msg void OnFileDel();
+  afx_msg void OnFileSort();     // sort file display by size / path
+  afx_msg void OnFileDupl();     // show only non-unique files
+  afx_msg void OnFileMark();     // Mark non-primary files
+  afx_msg void OnFileMove();     // Rename primary file to name of selected
+  afx_msg void OnFileDel();      // Delete selected files
   DECLARE_MESSAGE_MAP()
 
 };
