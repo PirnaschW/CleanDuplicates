@@ -112,7 +112,7 @@ void CCleanDuplicatesDoc::CollectFiles(const std::filesystem::directory_entry& s
     if (d.is_regular_file())  // collect data, but don't enter in tree
     {
       FileMap::FMap::const_iterator it = FileMap::Insert(fmap_, d);
-      if (fmap_.size() % 16 == 0) UpdateAllViewsNow(nullptr);  // refresh screen NOW
+      if (fmap_.size() % 256 == 0) UpdateAllViewsNow(nullptr);  // refresh screen NOW
     }
 
     if (d.is_directory()) // enter in tree, but don't collect the directory's data
