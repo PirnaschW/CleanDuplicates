@@ -255,7 +255,19 @@ void CCleanDuplicatesDoc::OnFileDel()
     {
       std::filesystem::path p = pFileList->GetItemText(i, 0).GetString();
       p /= pFileList->GetItemText(i, 1).GetString();
-      std::filesystem::remove(p);
+      try {
+        if (!std::filesystem::remove(p))
+        {
+          std::wstring m = L"could not remove" + p.wstring();
+          ::AfxMessageBox(m.c_str(), MB_OK | MB_APPLMODAL | MB_ICONEXCLAMATION);
+        }
+      }
+      catch (const std::filesystem::filesystem_error& e)
+      {
+        CString s{ e.what() };
+        std::wstring m = std::wstring(L"error: ") + s.GetString();
+        ::AfxMessageBox(m.c_str(), MB_OK | MB_APPLMODAL | MB_ICONEXCLAMATION);
+      }
     }
   }
 }

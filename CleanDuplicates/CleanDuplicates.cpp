@@ -17,7 +17,7 @@ CCleanDuplicatesApp::CCleanDuplicatesApp() noexcept
 
   // TODO: replace application ID string below with unique ID string; recommended
   // format for string is CompanyName.ProductName.SubProduct.VersionInformation
-  SetAppID(_T("CleanDuplicates.AppID.NoVersion"));
+  SetAppID(_T("PiSoft.CleanDuplicates.1.000"));
 
   // TODO: add construction code here,
   // Place all significant initialization in InitInstance
@@ -57,7 +57,7 @@ BOOL CCleanDuplicatesApp::InitInstance()
   // Change the registry key under which our settings are stored
   // TODO: You should modify this string to be something appropriate
   // such as the name of your company or organization
-  SetRegistryKey(_T("Local AppWizard-Generated Applications"));
+  SetRegistryKey(_T("PiSoft.CleanDuplicates"));
   LoadStdProfileSettings(16); // Load standard INI file options (including MRU)
 
 

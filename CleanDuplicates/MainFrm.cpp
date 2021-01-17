@@ -41,6 +41,13 @@ CMainFrame::~CMainFrame()
 
 int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
+  if (lpCreateStruct->cx <= 0 || lpCreateStruct->cy <= 0 ||
+      lpCreateStruct->x  <  0 || lpCreateStruct->y  <  0) // probably the first call; registry serves bad window location values
+  {
+    lpCreateStruct->x = lpCreateStruct->y = 0;
+    lpCreateStruct->cx = 1200;
+    lpCreateStruct->cy =  800;
+  }
   if (CMDIFrameWndEx::OnCreate(lpCreateStruct) == -1)
     return -1;
 
