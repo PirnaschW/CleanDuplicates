@@ -28,7 +28,7 @@ namespace FileMap
 
   using FMap = std::unordered_multimap<FileMap::FileKey, FileMap::FileData, FileMap::FileKeyHash, FileMap::FileKeyEquality>;
 
-  FMap::const_iterator Insert(FMap& fmap, const std::filesystem::directory_entry& d);
+  FMap::const_iterator Insert(FMap& fmap, const std::filesystem::directory_entry& d, bool saveHash);
 
 }
 

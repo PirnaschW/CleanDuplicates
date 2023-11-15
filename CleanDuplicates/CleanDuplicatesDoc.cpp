@@ -4,12 +4,14 @@
 IMPLEMENT_DYNCREATE(CCleanDuplicatesDoc, CDocument)
 BEGIN_MESSAGE_MAP(CCleanDuplicatesDoc, CDocument)
   ON_NOTIFY(TVN_SELCHANGED, ID_VIEW_FILETREE, OnTreeSelChanged)
+  ON_UPDATE_COMMAND_UI(ID_DIR_SAVEHASH, OnUpdateDirSaveHash)
   ON_UPDATE_COMMAND_UI(ID_LIST_SORT_PATH, OnUpdateFileSortPath)
   ON_UPDATE_COMMAND_UI(ID_LIST_SORT_SIZE, OnUpdateFileSortSize)
   ON_UPDATE_COMMAND_UI(ID_LIST_DUPL, OnUpdateFileDupl)
   ON_UPDATE_COMMAND_UI(ID_LIST_MARK, OnUpdateFileMark)
   ON_UPDATE_COMMAND_UI(ID_LIST_MOVE, OnUpdateFileMove)
   ON_UPDATE_COMMAND_UI(ID_LIST_DEL, OnUpdateFileDel)
+  ON_COMMAND(ID_DIR_SAVEHASH, OnDirSaveHash)
   ON_COMMAND(ID_LIST_SORT_PATH, OnFileSort)
   ON_COMMAND(ID_LIST_SORT_SIZE, OnFileSort)
   ON_COMMAND(ID_LIST_DUPL, OnFileDupl)
@@ -109,10 +111,15 @@ void CCleanDuplicatesDoc::CollectFiles(const std::filesystem::directory_entry& s
 {
   for (auto& d : std::filesystem::directory_iterator(s, std::filesystem::directory_options::skip_permission_denied))
   {
+    if (d.path().extension().string() == HashExtension)
+    {
+      continue;
+    }
+
     if (d.is_regular_file())  // collect data, but don't enter in tree
     {
-      FileMap::FMap::const_iterator it = FileMap::Insert(fmap_, d);
-      if (fmap_.size() % 256 == 0) UpdateAllViewsNow(nullptr);  // refresh screen NOW
+      FileMap::FMap::const_iterator it = FileMap::Insert(fmap_, d, saveHash);
+      if (fmap_.size() % 128 == 0) UpdateAllViewsNow(nullptr);  // refresh screen NOW
     }
 
     if (d.is_directory()) // enter in tree, but don't collect the directory's data
@@ -270,4 +277,10 @@ void CCleanDuplicatesDoc::OnFileDel()
       }
     }
   }
+}
+
+void CCleanDuplicatesDoc::OnUpdateDirSaveHash(CCmdUI* pCmdUI) { pCmdUI->SetCheck(saveHash ? 1 : 0); pCmdUI->Enable(TRUE); }
+void CCleanDuplicatesDoc::OnDirSaveHash()
+{
+  saveHash ^= true;
 }

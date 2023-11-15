@@ -82,7 +82,7 @@ namespace MyViews
   {
     CFolderPickerDialog dlg{};
     dlg.m_ofn.lpstrTitle = _T("Select Path");
-    dlg.m_ofn.lpstrInitialDir = _T("S:\\Pictures");
+    dlg.m_ofn.lpstrInitialDir = _T("E:\\Pictures");
     if (dlg.DoModal() == IDOK)
     {
       const std::wstring s = dlg.GetPathName().GetString();

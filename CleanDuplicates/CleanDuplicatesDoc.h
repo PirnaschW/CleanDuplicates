@@ -1,4 +1,6 @@
 
+constexpr char HashExtension[]{ ".md5" };
+
 class CCleanDuplicatesDoc : public CDocument
 {
 protected: // create from serialization only
@@ -31,6 +33,7 @@ public:
   FileMap::FMap fmap_{};
   bool duplicatesOnly{ false };
   bool checkDuplicates{ false };
+  bool saveHash{ true };
   size_t sortBy{ 0 };
 
 protected:
@@ -38,12 +41,14 @@ protected:
   // add functions that modify the document content in the CDoc
   // add functions that modify the view's display in the CView
   afx_msg void OnTreeSelChanged(NMHDR*, LRESULT*);
+  afx_msg void OnUpdateDirSaveHash(CCmdUI* pCmdUI);
   afx_msg void OnUpdateFileSortPath(CCmdUI* pCmdUI);
   afx_msg void OnUpdateFileSortSize(CCmdUI* pCmdUI);
   afx_msg void OnUpdateFileDupl(CCmdUI* pCmdUI);
   afx_msg void OnUpdateFileMark(CCmdUI* pCmdUI);
   afx_msg void OnUpdateFileMove(CCmdUI* pCmdUI);
   afx_msg void OnUpdateFileDel(CCmdUI* pCmdUI);
+  afx_msg void OnDirSaveHash();  // Save Hashes
   afx_msg void OnFileSort();     // sort file display by size / path
   afx_msg void OnFileDupl();     // show only non-unique files
   afx_msg void OnFileMark();     // Mark non-primary files

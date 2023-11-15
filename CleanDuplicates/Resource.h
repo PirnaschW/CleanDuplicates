@@ -23,7 +23,8 @@
 #define ID_DIR_ADD                     411  // Command
 #define ID_DIR_DEL                     412  // Command
 #define ID_DIR_DELALL                  413  // Command
-                                      
+#define ID_DIR_SAVEHASH                414  // Command
+
 // File Tree                          
 #define ID_VIEW_FILETREE               501  // View ID
 #define IDS_FILETREE                   502  // String
